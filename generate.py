@@ -68,7 +68,6 @@ def main():
 
     # Sort all of the notes, with the newest on top
     all_notes.sort(key=lambda x: x["date"], reverse=True)
-    print(all_notes)
 
     # Generate the HTML list of all notes for the index
     html = []
@@ -77,7 +76,6 @@ def main():
         html.append('<a href="note/{url}">{title} ({date})</a>'.format_map(note))
         html.append("</li>")
     html = "".join(html)
-    print(html)
 
     index_content = re.sub("<!--notes-->", html, template_index)
     (OUTPUT / "index.html").write_text(index_content)
