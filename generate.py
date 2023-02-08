@@ -1,4 +1,5 @@
 import configparser
+import json
 import re
 from datetime import datetime
 from pathlib import Path
@@ -6,13 +7,6 @@ from urllib.parse import quote_plus
 
 
 __all__ = ["main"]
-
-
-INPUT = Path("raw")
-OUTPUT = Path("generated")
-NOTE_OUTPUT = Path("generated") / "note"
-TEMPLATE_DIR = Path("templates")
-STATIC_FILES = Path("static")
 
 
 def get_meta(content: str, /) -> dict:
@@ -32,21 +26,31 @@ def get_meta(content: str, /) -> dict:
     return note_meta
 
 
+def get_config() -> dict[str, Path]:
+    config = json.loads(Path("config.json").read_text())
+    config = {k: Path(v) for k, v in config.items()}
+    config["note_path"] = config["output"] / config["note_path"]
+    return config
+
+
 def main():
+    # Get the generator config
+    config = get_config()
+
     # Create the output directory
-    NOTE_OUTPUT.mkdir(parents=True, exist_ok=True)
+    config["note_path"].mkdir(parents=True, exist_ok=True)
 
     # Get the templates
-    template_index = (TEMPLATE_DIR / "index.html").read_text()
-    template_note = (TEMPLATE_DIR / "note.html").read_text()
+    template_index = (config["templates"] / "index.html").read_text()
+    template_note = (config["templates"] / "note.html").read_text()
 
     # Generate each note
     all_notes = []
-    for f in INPUT.iterdir():
+    for f in config["input"].iterdir():
         # Get the note content
         content = f.read_text()
 
-        # Get the metadata
+        # Get the note metadata
         meta = get_meta(content)
 
         # Remove the raw meta from the text
@@ -65,7 +69,7 @@ def main():
         all_notes.append({"title": meta["title"], "date": date, "url": note_file})
 
         # Write the generated note
-        (NOTE_OUTPUT / note_file).write_text(content)
+        (config["note_path"] / note_file).write_text(content)
 
     # Sort all of the notes, with the newest on top
     all_notes.sort(key=lambda x: x["date"], reverse=True)
@@ -80,7 +84,7 @@ def main():
 
     # Write the index
     index_content = re.sub("<!--notes-->", html, template_index)
-    (OUTPUT / "index.html").write_text(index_content)
+    (config["output"] / "index.html").write_text(index_content)
 
 
 if __name__ == "__main__":

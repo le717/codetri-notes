@@ -1,0 +1,6 @@
+{
+  "templates": "templates",
+  "input": "raw",
+  "output": "generated",
+  "note_path": "note"
+}
