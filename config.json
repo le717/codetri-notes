@@ -2,5 +2,6 @@
   "templates": "templates",
   "input": "raw",
   "output": "generated",
-  "note_path": "note"
+  "note_path": "note",
+  "date_format": "%b %d, %Y @ %I:%M %p %Z"
 }
