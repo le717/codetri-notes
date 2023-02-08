@@ -3,6 +3,7 @@ import re
 from datetime import datetime
 from pathlib import Path
 from urllib.parse import quote_plus
+from shutil import copytree
 
 
 __all__ = ["main"]
@@ -12,6 +13,7 @@ INPUT = Path("raw")
 OUTPUT = Path("generated")
 NOTE_OUTPUT = Path("generated") / "note"
 TEMPLATE_DIR = Path("templates")
+STATIC_FILES = Path("static")
 
 
 def get_meta(content: str, /) -> dict:
@@ -77,8 +79,12 @@ def main():
         html.append("</li>")
     html = "".join(html)
 
+    # Write the index
     index_content = re.sub("<!--notes-->", html, template_index)
     (OUTPUT / "index.html").write_text(index_content)
+
+    # Copy any static files
+    copytree(STATIC_FILES, OUTPUT, dirs_exist_ok=True)
 
 
 if __name__ == "__main__":
