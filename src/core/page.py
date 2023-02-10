@@ -1,3 +1,4 @@
+from configparser import ConfigParser
 import shutil
 from pathlib import Path
 
@@ -5,7 +6,7 @@ from jinja2 import Environment
 
 from src.core.helpers import get_config
 
-__all__ = ["dist", "render", "write"]
+__all__ = ["dist", "meta", "render", "write"]
 
 
 # def dist(dir_names: list[str]) -> None:
@@ -21,6 +22,23 @@ __all__ = ["dist", "render", "write"]
 #     # Create the site static files folders and files
 #     src_path = (Path() / "src" / "static").as_posix()
 #     shutil.copytree(src_path, dist_path.as_posix(), dirs_exist_ok=True)
+
+
+def meta(content: str, /) -> dict:
+    """Extract a note's metadata."""
+    # Use the Python `configparser` for quickness for note metadata
+    parser = ConfigParser(default_section="meta")
+
+    # Get the metadata
+    end_tag = "[endmeta]"
+    raw_text = content[: content.find(end_tag) + len(end_tag)]
+    parser.read_string(raw_text)
+
+    # Pull the metadata out of the base key and append the raw text
+    note_meta = parser["meta"]
+    note_meta["raw_text"] = raw_text
+    parser.clear()
+    return note_meta
 
 
 def render(

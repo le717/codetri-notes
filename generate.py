@@ -8,27 +8,9 @@ from urllib.parse import quote_plus
 from jinja2 import Environment, PackageLoader, select_autoescape
 
 from src.core import helpers, page
-# from src.core.helpers import ALL_MIDDLEWARE, ALL_FILTERS, get_config
 
 
 __all__ = ["main"]
-
-
-def get_meta(content: str, /) -> dict:
-    """Extract a note's metadata."""
-    # Use the Python `configparser` for quickness for note metadata
-    parser = configparser.ConfigParser(default_section="meta")
-
-    # Get the metadata
-    end_tag = "[endmeta]"
-    raw_text = content[: content.find(end_tag) + len(end_tag)]
-    parser.read_string(raw_text)
-
-    # Pull the metadata out of the base key and append the raw text
-    note_meta = parser["meta"]
-    note_meta["raw_text"] = raw_text
-    parser.clear()
-    return note_meta
 
 
 def _format_dt(dt: datetime, fmt: str) -> str:
@@ -62,7 +44,7 @@ def main():
     for f in config["input"].iterdir():
         # Get the note content and metadata
         content = f.read_text()
-        meta = get_meta(content)
+        meta = page.meta(content)
 
         # Remove the raw meta from the note
         content = content.replace(meta["raw_text"], "").strip()
