@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" href="static/favicon.png">
-  <title><!--title--> | CodeTri Notes</title>
+  <title>{{ title }} | CodeTri Notes</title>
   <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
   <link rel="stylesheet" href="static/style.css">
 </head>
@@ -22,14 +22,15 @@
 
   <main>
     <article>
-      <h2><!--title--></h2>
-      <h6>Published <code><!--date--></code></h6>
-      <!--content-->
+      <h2>{{ title }}</h2>
+      <h6>Published <code>{{ format_datetime(date_published, date_format)}}</code></h6>
+      {{ content }}
     </article>
   </main>
 
   <footer>
-    <p>Powered by <a href="https://simplecss.org/">Simple.css</a></p>
+    <div>{{ current_year }} <a href="https://codetri.net">Caleb</a></div> |
+    <div>Powered by <a href="https://simplecss.org/">Simple.css</a></div>
   </footer>
 </body>
 </html>

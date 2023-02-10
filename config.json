@@ -1,5 +1,5 @@
 {
-  "templates": "templates",
+  "templates": "src/templates",
   "input": "raw",
   "output": "generated",
   "note_path": "note",

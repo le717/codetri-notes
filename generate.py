@@ -5,6 +5,11 @@ from datetime import datetime
 from pathlib import Path
 from urllib.parse import quote_plus
 
+from jinja2 import Environment, PackageLoader, select_autoescape
+
+from src.core import helpers, page
+# from src.core.helpers import ALL_MIDDLEWARE, ALL_FILTERS, get_config
+
 
 __all__ = ["main"]
 
@@ -26,32 +31,31 @@ def get_meta(content: str, /) -> dict:
     return note_meta
 
 
-def get_config() -> dict[str, Path]:
-    """Get the config JSON for the generator."""
-    config = json.loads(Path("config.json").read_text())
-    not_paths = ["date_format"]
-    config = {k: Path(v) if k not in not_paths else v for k, v in config.items()}
-    config["note_path"] = config["output"] / config["note_path"]
-    return config
-
-
 def _format_dt(dt: datetime, fmt: str) -> str:
-    """Format a datetime object to a  datestring."""
+    """Format a datetime object to a datestring."""
     if fmt == "iso":
         return dt.isoformat()
     return dt.strftime(fmt)
 
 
 def main():
+    # Start by creating a Jinja2 renderer and adding all our custom middleware and filters
+    env = Environment(
+        loader=PackageLoader("src", "templates"),
+        autoescape=select_autoescape(["html"]),
+    )
+    env.globals.update(helpers.ALL_MIDDLEWARE)
+    env.filters.update(helpers.ALL_FILTERS)
+
     # Get the generator config
-    config = get_config()
+    config = helpers.get_config()
 
     # Create the output directory
     config["note_path"].mkdir(parents=True, exist_ok=True)
 
     # Get the templates
-    template_index = (config["templates"] / "index.html").read_text()
-    template_note = (config["templates"] / "note.html").read_text()
+    template_index = (config["templates"] / "index.jinja2").read_text()
+    template_note = (config["templates"] / "note.jinja2").read_text()
 
     # Generate each note
     all_notes = []
@@ -67,20 +71,20 @@ def main():
         date = datetime.fromisoformat(meta["date"])
 
         # Fill in all the content
-        content = re.sub(r"<!--content-->", content, template_note)
-        content = re.sub(r"<!--title-->", meta["title"], content)
-        content = re.sub(
-            r"<!--date-->",
-            _format_dt(date, config["date_format"]),
-            content,
-        )
+        render_opts = {
+            "title": meta["title"],
+            "content": content,
+            "date_published": date,
+            "date_format": config["date_format"],
+        }
+        rendered_note = page.render("note", render_opts, env)
 
         # Keep a record of the note so we can generate the index when we are done
         note_file = f"{quote_plus(meta['url'])}.html"
         all_notes.append({"title": meta["title"], "date": date, "url": note_file})
 
         # Write the generated note
-        (config["note_path"] / note_file).write_text(content)
+        page.write(note_file, data=rendered_note)
 
     # Sort all of the notes, with the newest on top
     all_notes.sort(key=lambda x: x["date"], reverse=True)
