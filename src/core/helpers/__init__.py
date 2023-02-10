@@ -1,9 +1,11 @@
-from datetime import date, datetime
 import json
+import shutil
+from datetime import date, datetime
 from pathlib import Path
 from typing import Callable
 
-__all__ = ["ALL_FILTERS", "ALL_MIDDLEWARE", "get_config"]
+
+__all__ = ["ALL_FILTERS", "ALL_MIDDLEWARE", "get_config", "make_dist"]
 
 
 def get_config() -> dict[str, Path]:
@@ -11,8 +13,25 @@ def get_config() -> dict[str, Path]:
     config = json.loads(Path("config.json").read_text())
     not_paths = ["date_format", "paths"]
     config = {k: Path(v) if k not in not_paths else v for k, v in config.items()}
-    config["note_path"] = config["output"] / config["note_path"]
     return config
+
+
+def make_dist() -> None:
+    """Create all of the required directories."""
+    config = get_config()
+    dist_path = Path(config["output"])
+
+    # TODO: Delete everything first
+
+    # Create the directory the notes live in
+    (dist_path / config["note_path"]).mkdir(parents=True, exist_ok=True)
+
+    # Create the images directory
+    (dist_path / "images").mkdir(parents=True, exist_ok=True)
+
+    # Create the site static files folders and files
+    src_path = (Path() / "static").as_posix()
+    shutil.copytree(src_path, (dist_path / "static").as_posix(), dirs_exist_ok=True)
 
 
 def current_year() -> int:

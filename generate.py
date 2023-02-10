@@ -1,5 +1,4 @@
 from datetime import datetime
-from pathlib import Path
 from urllib.parse import quote_plus
 
 from jinja2 import Environment, PackageLoader, select_autoescape
@@ -8,13 +7,6 @@ from src.core import helpers, page
 
 
 __all__ = ["main"]
-
-
-def _format_dt(dt: datetime, fmt: str) -> str:
-    """Format a datetime object to a datestring."""
-    if fmt == "iso":
-        return dt.isoformat()
-    return dt.strftime(fmt)
 
 
 def main():
@@ -26,15 +18,9 @@ def main():
     env.globals.update(helpers.ALL_MIDDLEWARE)
     env.filters.update(helpers.ALL_FILTERS)
 
-    # Get the generator config
+    # Get the generator config and set up for dist
     config = helpers.get_config()
-
-    # Create the output directory
-    config["note_path"].mkdir(parents=True, exist_ok=True)
-
-    # Get the templates
-    template_index = (config["templates"] / "index.jinja2").read_text()
-    template_note = (config["templates"] / "note.jinja2").read_text()
+    helpers.make_dist()
 
     # Generate each note
     all_notes = []
@@ -63,7 +49,7 @@ def main():
         all_notes.append({"title": meta["title"], "date": date, "url": note_file})
 
         # Write the generated note
-        page.write(config["note_path"], note_file, data=rendered_note)
+        page.write(config["output"], config["note_path"], note_file, data=rendered_note)
 
     # Sort all of the notes, with the newest on top
     all_notes.sort(key=lambda x: x["date"], reverse=True)

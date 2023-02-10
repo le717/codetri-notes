@@ -1,26 +1,10 @@
 from configparser import ConfigParser
-import shutil
 from pathlib import Path
 
 from jinja2 import Environment
 
 
-__all__ = ["dist", "meta", "render", "write"]
-
-
-# def dist(dir_names: list[str]) -> None:
-#     dist_path = sys_vars.get_path("DIST_PATH")
-
-#     # Create the film years folders
-#     for dir_name in dir_names:
-#         (dist_path / "films" / dir_name).mkdir(parents=True, exist_ok=True)
-
-#     # Create the film images folder
-#     (dist_path / "films" / "images").mkdir(parents=True, exist_ok=True)
-
-#     # Create the site static files folders and files
-#     src_path = (Path() / "src" / "static").as_posix()
-#     shutil.copytree(src_path, dist_path.as_posix(), dirs_exist_ok=True)
+__all__ = ["meta", "render", "write"]
 
 
 def meta(content: str, /) -> dict:
