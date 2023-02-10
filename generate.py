@@ -1,6 +1,3 @@
-import configparser
-import json
-import re
 from datetime import datetime
 from pathlib import Path
 from urllib.parse import quote_plus
@@ -66,28 +63,18 @@ def main():
         all_notes.append({"title": meta["title"], "date": date, "url": note_file})
 
         # Write the generated note
-        page.write(note_file, data=rendered_note)
+        page.write(config["note_path"], note_file, data=rendered_note)
 
     # Sort all of the notes, with the newest on top
     all_notes.sort(key=lambda x: x["date"], reverse=True)
 
-    # Generate the HTML list of all notes for the index
-    html = []
-    for note in all_notes:
-        html.append("<li>")
-        html.append(
-            '<a href="note/{url}">{title} ({date})</a>'.format(
-                url=note["url"],
-                title=note["title"],
-                date=_format_dt(note["date"], config["date_format"]),
-            )
-        )
-        html.append("</li>")
-    html = "".join(html)
-
-    # Write the index
-    index_content = re.sub("<!--notes-->", html, template_index)
-    (config["output"] / "index.html").write_text(index_content)
+    # Build up the index with all the current notes
+    render_opts = {
+        "notes": all_notes,
+        "date_format": config["date_format"],
+    }
+    rendered_index = page.render("index", render_opts, env)
+    page.write(config["output"], "index.html", data=rendered_index)
 
 
 if __name__ == "__main__":

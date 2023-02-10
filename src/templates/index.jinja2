@@ -22,12 +22,15 @@
 
   <main>
     <ul>
-    <!--notes-->
+      {% for note in notes -%}
+      <li><a href="note/{{ note.url }}">{{ note.title }} ({{ format_datetime(note.date, date_format) }})</a></li>
+      {% endfor -%}
     </ul>
   </main>
 
   <footer>
-    <p>Powered by <a href="https://simplecss.org/">Simple.css</a></p>
+    <div>{{ current_year }} <a href="https://codetri.net">Caleb</a></div> |
+    <div>Powered by <a href="https://simplecss.org/">Simple.css</a></div>
   </footer>
 </body>
 </html>

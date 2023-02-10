@@ -4,7 +4,6 @@ from pathlib import Path
 
 from jinja2 import Environment
 
-from src.core.helpers import get_config
 
 __all__ = ["dist", "meta", "render", "write"]
 
@@ -51,4 +50,4 @@ def render(
 
 
 def write(*path: str, data: str = ""):
-    (get_config()["note_path"].joinpath(*path)).write_bytes(data.encode())
+    (Path().joinpath(*path)).write_bytes(data.encode())
