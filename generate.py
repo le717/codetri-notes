@@ -10,9 +10,10 @@ __all__ = ["main"]
 
 
 def main():
-    # Start by creating a Jinja2 renderer and adding all our custom middleware and filters
+    # Start by creating a Jinja2 renderer and adding all
+    # our custom middleware and filters
     env = Environment(
-        loader=PackageLoader("src", "templates"),
+        loader=PackageLoader("usr", "templates"),
         autoescape=select_autoescape(["html"]),
     )
     env.globals.update(helpers.ALL_MIDDLEWARE)
@@ -24,7 +25,7 @@ def main():
 
     # Generate each note
     all_notes = []
-    for f in config["input"].iterdir():
+    for f in config["paths"]["input"].iterdir():
         # Get the note content and metadata
         content = f.read_text()
         meta = page.meta(content)
@@ -49,7 +50,12 @@ def main():
         all_notes.append({"title": meta["title"], "date": date, "url": note_file})
 
         # Write the generated note
-        page.write(config["output"], config["note_path"], note_file, data=rendered_note)
+        page.write(
+            config["paths"]["output"],
+            config["paths"]["note_path"],
+            note_file,
+            data=rendered_note,
+        )
 
     # Sort all of the notes, with the newest on top
     all_notes.sort(key=lambda x: x["date"], reverse=True)
@@ -60,7 +66,7 @@ def main():
         "date_format": config["date_format"],
     }
     rendered_index = page.render("index", render_opts, env)
-    page.write(config["output"], "index.html", data=rendered_index)
+    page.write(config["paths"]["output"], "index.html", data=rendered_index)
 
 
 if __name__ == "__main__":

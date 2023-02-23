@@ -11,8 +11,7 @@ __all__ = ["ALL_FILTERS", "ALL_MIDDLEWARE", "get_config", "make_dist"]
 def get_config() -> dict[str, Path]:
     """Get the config JSON for the generator."""
     config = json.loads(Path("config.json").read_text())
-    not_paths = ["date_format", "paths"]
-    config = {k: Path(v) if k not in not_paths else v for k, v in config.items()}
+    config["paths"] = {k: Path(v) for k, v in config["paths"].items()}
     return config
 
 
