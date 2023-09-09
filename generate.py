@@ -1,10 +1,10 @@
 from datetime import datetime
+from pathlib import Path
 from urllib.parse import quote_plus
 
 from jinja2 import Environment, PackageLoader, select_autoescape
 
 from src.core import helpers, page
-
 
 __all__ = ["main"]
 
@@ -25,7 +25,7 @@ def main():
 
     # Generate each note
     all_notes = []
-    for f in config["paths"]["input"].iterdir():
+    for f in (Path("usr") / "posts").iterdir():
         # Get the note content and metadata
         content = f.read_text()
         meta = page.meta(content)
@@ -38,21 +38,29 @@ def main():
 
         # Fill in all the content
         render_opts = {
-            "title": meta["title"],
-            "content": content,
-            "date_published": date,
-            "date_format": config["date_format"],
+            "site": config["site"],
+            "post": {
+                "title": meta["title"],
+                "content": content,
+                "date_published": date,
+            },
         }
-        rendered_note = page.render("note", render_opts, env)
+        rendered_note = page.render("post", render_opts, env)
 
         # Keep a record of the note so we can generate the index when we are done
         note_file = f"{quote_plus(meta['url'])}.html"
-        all_notes.append({"title": meta["title"], "date": date, "url": note_file})
+        all_notes.append(
+            {
+                "title": meta["title"],
+                "date": date,
+                "url": "{}/{}".format(config["directories"]["posts"], note_file),
+            }
+        )
 
         # Write the generated note
         page.write(
-            config["paths"]["output"],
-            config["paths"]["note_path"],
+            config["directories"]["output"],
+            config["directories"]["posts"],
             note_file,
             data=rendered_note,
         )
@@ -62,11 +70,12 @@ def main():
 
     # Build up the index with all the current notes
     render_opts = {
-        "notes": all_notes,
-        "date_format": config["date_format"],
+        "posts": all_notes,
+        "site": config["site"],
+        "post": {"title": "Home"},
     }
     rendered_index = page.render("index", render_opts, env)
-    page.write(config["paths"]["output"], "index.html", data=rendered_index)
+    page.write(config["directories"]["output"], "index.html", data=rendered_index)
 
 
 if __name__ == "__main__":

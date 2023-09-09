@@ -1,0 +1,9 @@
+{% extends '_partials/base.jinja2' %}
+
+{% block content %}
+<article>
+  <h2>{{ post.title }}</h2>
+  <h6>Published <code>{{ format_datetime(post.date_published, site.date_format)}}</code></h6>
+  {{ post.content }}
+</article>
+{% endblock %}

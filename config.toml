@@ -1,0 +1,9 @@
+[site]
+title = "Live Life Real"
+subtitle = ""
+domain = "https://blog.codetri.net"
+date_format = "%b %d, %Y @ %I:%M %p %Z"
+
+[directories]
+output = "generated"
+posts = "post"

@@ -1,29 +1,28 @@
-import json
 import shutil
+import tomllib
 from datetime import date, datetime
 from pathlib import Path
 from typing import Callable
-
 
 __all__ = ["ALL_FILTERS", "ALL_MIDDLEWARE", "get_config", "make_dist"]
 
 
 def get_config() -> dict[str, Path]:
     """Get the config JSON for the generator."""
-    config = json.loads(Path("config.json").read_text())
-    config["paths"] = {k: Path(v) for k, v in config["paths"].items()}
+    config = tomllib.loads(Path("config.toml").read_text())
+    config["directories"] = {k: Path(v) for k, v in config["directories"].items()}
     return config
 
 
 def make_dist() -> None:
     """Create all of the required directories."""
     config = get_config()
-    dist_path = Path(config["output"])
+    dist_path = Path(config["directories"]["output"])
 
     # TODO: Delete everything first
 
     # Create the directory the notes live in
-    (dist_path / config["note_path"]).mkdir(parents=True, exist_ok=True)
+    (dist_path / config["directories"]["posts"]).mkdir(parents=True, exist_ok=True)
 
     # Create the images directory
     (dist_path / "images").mkdir(parents=True, exist_ok=True)
