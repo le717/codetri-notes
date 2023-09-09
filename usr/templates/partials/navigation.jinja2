@@ -1,0 +1,6 @@
+<nav>
+  <a href="/">Home</a>
+  {% for item in site.nav.values() %}
+  <a href="{{ item.url }}">{{ item.label }}</a>
+  {% endfor %}
+</nav>

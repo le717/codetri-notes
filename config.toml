@@ -4,6 +4,10 @@ subtitle = ""
 domain = "https://blog.codetri.net"
 date_format = "%b %d, %Y @ %I:%M %p %Z"
 
+[site.nav]
+podcast = { label = "Podcast", url = "https://podcast.codetri.net/" }
+portfolio = { label = "Portfolio", url = "https://codetri.net"}
+
 [directories]
 output = "generated"
 posts = "post"
