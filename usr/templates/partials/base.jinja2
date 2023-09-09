@@ -1,3 +1,5 @@
+{% from 'macros/render_logo.jinja2' import render_logo -%}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,12 +10,14 @@
   <title>{{ post.title }} | {{ site.title }}</title>
   <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
   <link rel="stylesheet" href="static/style.css">
+  {% block css %}{% endblock -%}
 </head>
 
 <body>
   <header>
-    <h1>{{ site.title }}</h1>
-    <p>{{ site.subtitle }}</p>
+    {{ render_logo(site.logo) }}
+    <h1 class="site-title">{{ site.title }}</h1>
+    <p class="site-subtitle">{{ site.subtitle }}</p>
     {% include 'partials/navigation.jinja2' %}
   </header>
 
@@ -22,5 +26,6 @@
   </main>
 
   {% include 'partials/footer.jinja2' %}
+  {% block js %}{% endblock -%}
 </body>
 </html>
