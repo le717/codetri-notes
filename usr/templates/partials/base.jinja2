@@ -21,13 +21,9 @@
   </header>
 
   <main>
-    {% block content %}
-    {% endblock %}
+    {% block content %}{% endblock -%}
   </main>
 
-  <footer>
-    <div>{{ current_year }} <a href="https://codetri.net">Caleb</a></div> |
-    <div>Powered by <a href="https://simplecss.org/">Simple.css</a></div>
-  </footer>
+  {% include 'partials/footer.jinja2' %}
 </body>
 </html>

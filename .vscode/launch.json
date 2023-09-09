@@ -11,6 +11,14 @@
       "program": "generate.py",
       "console": "internalConsole",
       "justMyCode": true
+    },
+    {
+      "name": "Simple HTTP server",
+      "type": "python",
+      "request": "launch",
+      "module": "http.server",
+      "args": ["-b", "127.0.0.1", "-d", ".\\generated\\", "717"],
+      "justMyCode": true
     }
   ]
 }
