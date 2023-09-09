@@ -1,5 +1,5 @@
 {% macro render_logo(logo) -%}
 {% if logo is defined and logo.file is defined %}
-<img class="site-logo" alt="{{ logo.alt_text }}" src="static/{{ logo.file }}" {% if logo.width is defined %}width="{{ logo.width }}"{% endif %} {% if logo.height is defined %}height="{{ logo.height }}"{% endif %}>
+<img class="site-logo" alt="{{ logo.alt_text }}" src="/static/{{ logo.file }}" {% if logo.width is defined %}width="{{ logo.width }}"{% endif %} {% if logo.height is defined %}height="{{ logo.height }}"{% endif %}>
 {% endif %}
 {%- endmacro %}
