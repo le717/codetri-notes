@@ -1,3 +1,22 @@
+:root {
+  --serif-font: "Raleway", -apple-system, BlinkMacSystemFont, "Avenir Next", "Avenir",
+    "Nimbus Sans L", "Roboto", "Noto Sans", "Segoe UI", Arial, Helvetica,
+    "Helvetica Neue", sans-serif;
+  --sans-font: "Karla", var(--serif-font);
+}
+
 nav a.current {
- color: var(--accent);
+  color: var(--accent);
+}
+
+h1, h2, h3 {
+  font-family: var(--serif-font);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1d2333;
+    --accent-bg: #1d2333;
+    --text: #fff;
+  }
 }

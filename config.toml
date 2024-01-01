@@ -5,7 +5,7 @@ domain = "https://blog.codetri.net"
 date_format = "%B %d, %Y @ %I:%M %p %Z"
 
 [site.logo]
-file = "favicon.png"
+file = "logo.svg"
 width = 80
 height = 80
 alt_text = ""
