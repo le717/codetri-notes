@@ -1,5 +1,6 @@
 from datetime import datetime
 from pathlib import Path
+from time import time
 from urllib.parse import quote_plus
 
 import mistletoe
@@ -12,9 +13,10 @@ from src.core import helpers, page
 __all__ = ["main"]
 
 
-def main():
-    # Start by creating a Jinja2 renderer and adding all
-    # our custom middleware and filters
+def main() -> None:
+    start_time = time()
+
+    # Start by creating a Jinja2 renderer and adding all our custom middleware and filters
     env = Environment(
         loader=PackageLoader("usr", "templates"),
         autoescape=select_autoescape(["html"]),
@@ -83,6 +85,10 @@ def main():
     }
     rendered_index = page.render("index", render_opts, env)
     page.write(config["directories"]["output"], "index.html", data=rendered_index)
+
+    # Provide a basic "how long did it run" message
+    total_time = time() - start_time
+    print(f"Total generation time: {helpers.duration(total_time)}")
 
 
 if __name__ == "__main__":

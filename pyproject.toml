@@ -30,4 +30,4 @@ quote-style = "double"
 
 [tool.ruff.isort]
 lines-after-imports = 2
-extra-standard-library = ["zoneinfo"]
+extra-standard-library = ["tomllib", "zoneinfo"]

@@ -1,10 +1,12 @@
 import shutil
 import tomllib
 from datetime import date, datetime
+from math import floor
 from pathlib import Path
 from typing import Callable
 
-__all__ = ["ALL_FILTERS", "ALL_MIDDLEWARE", "get_config", "make_dist"]
+
+__all__ = ["ALL_FILTERS", "ALL_MIDDLEWARE", "duration", "get_config", "make_dist"]
 
 
 def get_config() -> dict[str, Path]:
@@ -42,6 +44,18 @@ def format_datetime(dt: datetime, fmt: str) -> str:
     if fmt == "iso":
         return dt.isoformat()
     return dt.strftime(fmt)
+
+
+def duration(seconds: int) -> str:
+    # https://stackoverflow.com/a/3856312
+    hours = floor(seconds / 3600)
+    mins = floor(seconds / 60 % 60)
+    secs = floor(seconds % 60)
+
+    # Only display the hours if needed
+    if hours > 0:
+        return f"{hours:02d}:{mins:02d}:{secs:02d}"
+    return f"{mins:02d}:{secs:02d}"
 
 
 ALL_FILTERS = {}
