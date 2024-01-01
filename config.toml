@@ -2,7 +2,7 @@
 title = "Live Life Real"
 subtitle = ""
 domain = "https://blog.codetri.net"
-date_format = "%b %d, %Y @ %I:%M %p %Z"
+date_format = "%B %d, %Y @ %I:%M %p %Z"
 
 [site.logo]
 file = "favicon.png"
@@ -15,5 +15,5 @@ podcast = { label = "Podcast", url = "https://podcast.codetri.net/" }
 portfolio = { label = "Portfolio", url = "https://codetri.net"}
 
 [directories]
-output = "generated"
+output = "dist"
 posts = "post"

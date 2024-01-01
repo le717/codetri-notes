@@ -2,7 +2,9 @@ from datetime import datetime
 from pathlib import Path
 from urllib.parse import quote_plus
 
+import mistletoe
 from jinja2 import Environment, PackageLoader, select_autoescape
+from mistletoe.contrib.github_wiki import GithubWikiRenderer
 
 from src.core import helpers, page
 
@@ -45,6 +47,14 @@ def main():
                 "date_published": date,
             },
         }
+
+        # If we have encountered a Markdown file, we need to render it to HTML first
+        if f.suffix == ".md":
+            render_opts["post"]["content"] = mistletoe.markdown(
+                content, GithubWikiRenderer
+            )
+
+        # Render the page with the post content
         rendered_note = page.render("post", render_opts, env)
 
         # Keep a record of the note so we can generate the index when we are done
