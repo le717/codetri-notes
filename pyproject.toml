@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "codetri-notes"
 version = "0.1.0"
-description = ""
+description = "An accidental static blog site generator"
 authors = ["Caleb <le717@users.noreply.github.com>"]
 license = "MIT"
 readme = "README.md"
