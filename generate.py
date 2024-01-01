@@ -8,6 +8,7 @@ from mistletoe.contrib.github_wiki import GithubWikiRenderer
 
 from src.core import helpers, page
 
+
 __all__ = ["main"]
 
 
@@ -50,22 +51,18 @@ def main():
 
         # If we have encountered a Markdown file, we need to render it to HTML first
         if f.suffix == ".md":
-            render_opts["post"]["content"] = mistletoe.markdown(
-                content, GithubWikiRenderer
-            )
+            render_opts["post"]["content"] = mistletoe.markdown(content, GithubWikiRenderer)
 
         # Render the page with the post content
         rendered_note = page.render("post", render_opts, env)
 
         # Keep a record of the note so we can generate the index when we are done
         note_file = f"{quote_plus(meta['url'])}.html"
-        all_notes.append(
-            {
-                "title": meta["title"],
-                "date": date,
-                "url": "{}/{}".format(config["directories"]["posts"], note_file),
-            }
-        )
+        all_notes.append({
+            "title": meta["title"],
+            "date": date,
+            "url": "{}/{}".format(config["directories"]["posts"], note_file),
+        })
 
         # Write the generated note
         page.write(
