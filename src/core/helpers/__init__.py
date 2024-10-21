@@ -21,7 +21,9 @@ def make_dist() -> None:
     config = get_config()
     dist_path = Path(config["directories"]["output"])
 
-    # TODO: Delete everything first
+    # Delete any previous site generation first
+    if dist_path.exists():
+        shutil.rmtree(dist_path)
 
     # Create the directory the notes live in
     (dist_path / config["directories"]["posts"]).mkdir(parents=True, exist_ok=True)

@@ -30,7 +30,12 @@ quote-style = "double"
 
 [tool.ruff.lint]
 extend-select = [
-  "I",  # isort
+  "ERA", # eradicate
+  "I",   # isort,
+  "TD",  # flake8-todos
+  "PTH", # flake8-use-pathlib
+  "UP",  # pyupgrade
+  "SIM", # flake8-simplify
 ]
 
 [tool.ruff.lint.isort]
