@@ -2,7 +2,7 @@
 title = "Live Life Real"
 subtitle = ""
 domain = "https://blog.codetri.net"
-date_format = "%B %d, %Y @ %I:%M %p %Z"
+date_format = "%B %d, %Y"
 
 [site.logo]
 file = "logo.svg"
@@ -12,7 +12,7 @@ alt_text = ""
 
 [site.nav]
 podcast = { label = "Podcast", url = "https://podcast.codetri.net/" }
-portfolio = { label = "Portfolio", url = "https://codetri.net"}
+portfolio = { label = "Portfolio", url = "https://codetri.net" }
 
 [directories]
 output = "dist"

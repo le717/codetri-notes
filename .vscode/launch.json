@@ -6,7 +6,7 @@
   "configurations": [
     {
       "name": "Generate site",
-      "type": "python",
+      "type": "debugpy",
       "request": "launch",
       "program": "generate.py",
       "console": "internalConsole",
@@ -14,10 +14,10 @@
     },
     {
       "name": "Simple HTTP server",
-      "type": "python",
+      "type": "debugpy",
       "request": "launch",
       "module": "http.server",
-      "args": ["-b", "127.0.0.1", "-d", ".\\generated\\", "717"],
+      "args": ["-b", "127.0.0.1", "-d", ".\\dist\\", "717"],
       "justMyCode": true
     }
   ]

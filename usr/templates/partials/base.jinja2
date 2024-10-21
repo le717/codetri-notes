@@ -14,7 +14,7 @@
   {% block css %}{% endblock -%}
 </head>
 
-<body>
+<body class="page-{{ body_class }}">
   <header>
     {{ render_logo(site.logo) }}
     <h1 class="site-title">{{ site.title }}</h1>

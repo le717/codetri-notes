@@ -13,10 +13,83 @@ h1, h2, h3 {
   font-family: var(--serif-font);
 }
 
+a, a:visited {
+  color: var(--text);
+  border-bottom: 2px solid var(--accent);
+  text-decoration: none;
+  transition: border-color 200ms ease;
+}
+
+a:hover,
+a:active {
+  border-color: transparent;
+}
+
+body > header {
+  padding-top: 0.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 0.5rem solid rgba(96, 165, 250);
+  background-color: var(--header-bg);
+}
+
+header > nav {
+  padding-top: 0;
+}
+
+header > nav a,
+header > nav a:visited {
+  font-size: 1.1rem;
+}
+
+body > footer {
+  border-top: none;
+}
+
+article {
+  border: none;
+}
+
+.page-post {
+  grid-template-columns: 1fr min(65rem, 90%) 1fr;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: rgba(243, 244, 246);
+    --accent-bg: #60a5fa;
+    --text: black;
+    --border: white;
+
+    --header-bg: #60a5fa;
+  }
+
+  body > header {
+    color: white;
+    border-bottom: none;
+  }
+
+  body > header h1 {
+    text-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
+                 0 2px 4px rgba(0, 0, 0, 0.06);
+  }
+
+  header > nav a,
+  header > nav a:visited {
+    color: white;
+    border-color: white;
+  }
+  header > nav a:hover {
+    border-color: transparent;
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #1d2333;
     --accent-bg: #1d2333;
-    --text: #fff;
+    --accent: rgb(107, 114, 128);
+
+    --header-bg: #1d2333;
+    --text: white;
   }
 }
