@@ -1,10 +1,9 @@
 from datetime import datetime
-from pathlib import Path
 from time import time
 from urllib.parse import quote_plus
 
 import mistletoe
-from jinja2 import Environment, PackageLoader, select_autoescape
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 from mistletoe.contrib.github_wiki import GithubWikiRenderer
 
 from src.core import helpers, page
@@ -15,22 +14,24 @@ __all__ = ["main"]
 
 def main() -> None:
     start_time = time()
+    # Get the generator config
+    config = helpers.get_config()
 
     # Start by creating a Jinja2 renderer and adding all our custom middleware and filters
     env = Environment(
-        loader=PackageLoader("usr", "templates"),
+        loader=FileSystemLoader(config["directories"]["theme"]),
         autoescape=select_autoescape(["html"]),
     )
     env.globals.update(helpers.ALL_MIDDLEWARE)
     env.filters.update(helpers.ALL_FILTERS)
 
-    # Get the generator config and set up for dist
+    # Set up for dist
     config = helpers.get_config()
     helpers.make_dist()
 
     # Generate each note
     all_notes = []
-    for f in (Path("usr") / "posts").iterdir():
+    for f in config["directories"]["posts"].iterdir():
         # Get the note content and metadata
         content = f.read_text()
         meta = page.meta(content)
@@ -63,13 +64,13 @@ def main() -> None:
         all_notes.append({
             "title": meta["title"],
             "date": date,
-            "url": "{}/{}".format(config["directories"]["posts"], note_file),
+            "url": "{}/{}".format(str(config["directories"]["post_output_base_slug"]), note_file),
         })
 
         # Write the generated note
         page.write(
-            config["directories"]["output"],
-            config["directories"]["posts"],
+            str(config["directories"]["output"]),
+            str(config["directories"]["post_output_base_slug"]),
             note_file,
             data=rendered_note,
         )
@@ -84,7 +85,7 @@ def main() -> None:
         "post": {"title": "Home"},
     }
     rendered_index = page.render("index", render_opts, env)
-    page.write(config["directories"]["output"], "index.html", data=rendered_index)
+    page.write(str(config["directories"]["output"]), "index.html", data=rendered_index)
 
     # Provide a basic "how long did it run" message
     total_time = time() - start_time

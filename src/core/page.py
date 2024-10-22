@@ -33,5 +33,5 @@ def render(
     return template.render(**render_opts)
 
 
-def write(*path: str, data: str = ""):
+def write(*path: str, data: str = "") -> None:
     (Path().joinpath(*path)).write_bytes(data.encode())

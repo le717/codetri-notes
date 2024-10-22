@@ -1,7 +1,7 @@
 [site]
 title = "Live Life Real"
 subtitle = ""
-domain = "https://blog.codetri.net"
+domain = "https://notes.calebely.net"
 date_format = "%B %d, %Y"
 
 [site.logo]
@@ -11,9 +11,12 @@ height = 80
 alt_text = ""
 
 [site.nav]
-podcast = { label = "Podcast", url = "https://podcast.codetri.net/" }
-portfolio = { label = "Portfolio", url = "https://codetri.net" }
+podcast = { label = "Podcast", url = "https://podcast.calebely.net/" }
+portfolio = { label = "Portfolio", url = "https://calebely.net" }
 
 [directories]
+theme = "usr/templates"
+static = "usr/static"
+posts = "usr/posts"
 output = "dist"
-posts = "post"
+post_output_base_slug = "post"

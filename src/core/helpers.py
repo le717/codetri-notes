@@ -19,21 +19,20 @@ def get_config() -> dict[str, Path]:
 def make_dist() -> None:
     """Create all of the required directories."""
     config = get_config()
-    dist_path = Path(config["directories"]["output"])
+    dist_path: Path = config["directories"]["output"]
 
     # Delete any previous site generation first
     if dist_path.exists():
         shutil.rmtree(dist_path)
 
     # Create the directory the notes live in
-    (dist_path / config["directories"]["posts"]).mkdir(parents=True, exist_ok=True)
+    (dist_path / config["directories"]["post_output_base_slug"]).mkdir(parents=True, exist_ok=True)
 
     # Create the images directory
     (dist_path / "images").mkdir(parents=True, exist_ok=True)
 
     # Create the site static files folders and files
-    src_path = (Path() / "static").as_posix()
-    shutil.copytree(src_path, (dist_path / "static").as_posix(), dirs_exist_ok=True)
+    shutil.copytree(config["directories"]["static"], (dist_path / "static"), dirs_exist_ok=True)
 
 
 def current_year() -> int:
