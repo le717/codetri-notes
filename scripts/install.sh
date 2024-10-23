@@ -9,3 +9,6 @@ python3 -m venv venv
 venv/bin/python -m pip install pip --upgrade
 venv/bin/python ./scripts/get-requirements.py
 venv/bin/pip install -r ./requirements.txt
+
+# Make the scripts executable
+chmod u+x ./scripts/run-app.sh
