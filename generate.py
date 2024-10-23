@@ -32,6 +32,10 @@ def main() -> None:
     # Generate each note
     all_notes = []
     for f in config["directories"]["posts"].iterdir():
+        # Filter out dot files
+        if f.name.startswith("."):
+            continue
+
         # Get the note content and metadata
         content = f.read_text()
         meta = page.meta(content)
