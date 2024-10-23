@@ -1,8 +1,10 @@
 import shutil
 import tomllib
+from contextlib import suppress
 from datetime import date, datetime
 from math import floor
 from pathlib import Path
+from sys import argv
 from typing import Callable
 
 
@@ -11,7 +13,12 @@ __all__ = ["ALL_FILTERS", "ALL_MIDDLEWARE", "duration", "get_config", "make_dist
 
 def get_config() -> dict[str, Path]:
     """Get the config JSON for the generator."""
-    config = tomllib.loads(Path("config.toml").read_text())
+    # Passing a path to the config toml file after the command will use that instead
+    config_path = "config.toml"
+    with suppress(IndexError):
+        config_path = argv[1]
+
+    config = tomllib.loads(Path(config_path).read_text())
     config["directories"] = {k: Path(v) for k, v in config["directories"].items()}
     return config
 
