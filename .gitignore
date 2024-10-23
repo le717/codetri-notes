@@ -174,3 +174,4 @@ poetry.toml
 
 generated/
 usr/posts/
+requirements.txt
