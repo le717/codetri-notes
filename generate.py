@@ -1,3 +1,4 @@
+import argparse
 from datetime import datetime
 from time import time
 from urllib.parse import quote_plus
@@ -6,32 +7,47 @@ import mistletoe
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from mistletoe.contrib.github_wiki import GithubWikiRenderer
 
-from src.core import helpers, page
+from src.core import config, helpers, page
 
 
 __all__ = ["main"]
 
 
+def get_arguments() -> argparse.Namespace:
+    """Add command-line arguments to the script."""
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "-c",
+        "--config",
+        action="store",
+        default="config.toml",
+        help="Specify the config TOML file to use when building the site.",
+    )
+    return parser.parse_args()
+
+
 def main() -> None:
+    # Get the current time for a bit of info about runtime
     start_time = time()
-    # Get the generator config
-    config = helpers.get_config()
+
+    # Resolve the config file we are to use and load the contents therein
+    args = get_arguments()
+    helpers.set_config_data(args.config)
 
     # Start by creating a Jinja2 renderer and adding all our custom middleware and filters
     env = Environment(
-        loader=FileSystemLoader(config["directories"]["theme"]),
+        loader=FileSystemLoader(config.get_value("directories")["theme"]),
         autoescape=select_autoescape(["html"]),
     )
     env.globals.update(helpers.ALL_MIDDLEWARE)
     env.filters.update(helpers.ALL_FILTERS)
 
-    # Set up for dist
-    config = helpers.get_config()
+    # Create all of the directories that we need for dist
     helpers.make_dist()
 
     # Generate each note
     all_notes = []
-    for f in config["directories"]["posts"].iterdir():
+    for f in config.get_value("directories")["posts"].iterdir():
         # Filter out dot files
         if f.name.startswith("."):
             continue
@@ -48,7 +64,7 @@ def main() -> None:
 
         # Fill in all the content
         render_opts = {
-            "site": config["site"],
+            "site": config.get_value("site"),
             "post": {
                 "title": meta["title"],
                 "content": content,
@@ -68,13 +84,15 @@ def main() -> None:
         all_notes.append({
             "title": meta["title"],
             "date": date,
-            "url": "{}/{}".format(str(config["directories"]["post_output_base_slug"]), note_file),
+            "url": "{}/{}".format(
+                str(config.get_value("directories")["post_output_base_slug"]), note_file
+            ),
         })
 
         # Write the generated note
         page.write(
-            str(config["directories"]["output"]),
-            str(config["directories"]["post_output_base_slug"]),
+            str(config.get_value("directories")["output"]),
+            str(config.get_value("directories")["post_output_base_slug"]),
             note_file,
             data=rendered_note,
         )
@@ -85,11 +103,11 @@ def main() -> None:
     # Build up the index with all the current notes
     render_opts = {
         "posts": all_notes,
-        "site": config["site"],
+        "site": config.get_value("site"),
         "post": {"title": "Home"},
     }
     rendered_index = page.render("index", render_opts, env)
-    page.write(str(config["directories"]["output"]), "index.html", data=rendered_index)
+    page.write(str(config.get_value("directories")["output"]), "index.html", data=rendered_index)
 
     # Provide a basic "how long did it run" message
     total_time = time() - start_time

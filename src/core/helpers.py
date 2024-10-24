@@ -1,45 +1,40 @@
 import shutil
 import tomllib
-from contextlib import suppress
 from datetime import date, datetime
 from math import floor
 from pathlib import Path
-from sys import argv
 from typing import Callable
 
+from src.core import config
 
-__all__ = ["ALL_FILTERS", "ALL_MIDDLEWARE", "duration", "get_config", "make_dist"]
+
+__all__ = ["ALL_FILTERS", "ALL_MIDDLEWARE", "duration", "set_config_data", "make_dist"]
 
 
-def get_config() -> dict[str, Path]:
-    """Get the config JSON for the generator."""
-    # Passing a path to the config toml file after the command will use that instead
-    config_path = "config.toml"
-    with suppress(IndexError):
-        config_path = argv[1]
-
-    config = tomllib.loads(Path(config_path).read_text())
-    config["directories"] = {k: Path(v) for k, v in config["directories"].items()}
-    return config
+def set_config_data(config_file: str) -> dict[str, Path]:
+    """Get the config TOML for the generator."""
+    data = tomllib.loads(Path(config_file).read_text())
+    data["directories"] = {k: Path(v) for k, v in data["directories"].items()}
+    config.set_config(data)
 
 
 def make_dist() -> None:
     """Create all of the required directories."""
-    config = get_config()
-    dist_path: Path = config["directories"]["output"]
+    all_directories: dict[str, Path] = config.get_value("directories")
+    dist_path: Path = all_directories["output"]
 
     # Delete any previous site generation first
     if dist_path.exists():
         shutil.rmtree(dist_path)
 
     # Create the directory the notes live in
-    (dist_path / config["directories"]["post_output_base_slug"]).mkdir(parents=True, exist_ok=True)
+    (dist_path / all_directories["post_output_base_slug"]).mkdir(parents=True, exist_ok=True)
 
     # Create the images directory
     (dist_path / "images").mkdir(parents=True, exist_ok=True)
 
     # Create the site static files folders and files
-    shutil.copytree(config["directories"]["static"], (dist_path / "static"), dirs_exist_ok=True)
+    shutil.copytree(all_directories["static"], (dist_path / "static"), dirs_exist_ok=True)
 
 
 def current_year() -> int:
