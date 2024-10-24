@@ -2,11 +2,15 @@
 {% set body_class = 'home' %}
 
 {% block content %}
-<ul>
-  {% for post in posts -%}
-  <li><a href="{{ post.url }}">{{ post.title }} ({{ format_datetime(post.date, site.date_format) }})</a></li>
-  {% else %}
-  <li>No posts currently available to read.</li>
-  {% endfor -%}
-</ul>
+{% for post in posts -%}
+<div>
+  <p>
+    <a href="{{ post.url }}">{{ post.title }}</a>
+    <br>
+    <small><em>&mdash; {{ format_datetime(post.date, site.date_format) }}</em></small>
+  </p>
+</div>
+{% else -%}
+<h3>No posts currently available to read.</h3>
+{% endfor -%}
 {% endblock %}
