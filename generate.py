@@ -1,5 +1,6 @@
 import argparse
 from datetime import datetime
+from pathlib import Path
 from time import time
 from urllib.parse import quote_plus
 
@@ -32,6 +33,7 @@ def main() -> None:
 
     # Resolve the config file we are to use and load the contents therein
     args = get_arguments()
+    print(Path(args.config))
     helpers.set_config_data(args.config)
 
     # Start by creating a Jinja2 renderer and adding all our custom middleware and filters
