@@ -1,4 +1,5 @@
 import argparse
+import re
 from datetime import datetime
 from pathlib import Path
 from time import time
@@ -81,8 +82,11 @@ def main() -> None:
         # Render the page with the post content
         rendered_note = page.render("post", render_opts, env)
 
+        # Automatically generate a slug from the post title
+        slug = "-".join(m.lower() for m in re.findall(r"\w+", meta["title"], flags=re.I))
+
         # Keep a record of the note so we can generate the index when we are done
-        note_file = f"{meta['date']}-{quote_plus(meta['url'])}.html"
+        note_file = f"{meta['date']}-{quote_plus(slug)}.html"
         all_notes.append({
             "title": meta["title"],
             "date": date,
