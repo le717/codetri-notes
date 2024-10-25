@@ -1,7 +1,7 @@
 import argparse
 import re
+from contextlib import suppress
 from datetime import datetime
-from pathlib import Path
 from time import time
 from urllib.parse import quote_plus
 
@@ -25,7 +25,20 @@ def get_arguments() -> argparse.Namespace:
         default="config.toml",
         help="Specify the config TOML file to use when building the site.",
     )
-    return parser.parse_args()
+    parser.add_argument(
+        "-m",
+        "--minify",
+        action="store_true",
+        help="Should the generated files be minified? (default: no)",
+    )
+    parsed = parser.parse_args()
+
+    # Display the argument values used
+    print("Executing with the following arguments:")
+    for a in parser._actions:
+        with suppress(AttributeError):
+            print(f"\t * {a.dest}={getattr(parsed, a.dest)}")
+    return parsed
 
 
 def main() -> None:
@@ -34,7 +47,6 @@ def main() -> None:
 
     # Resolve the config file we are to use and load the contents therein
     args = get_arguments()
-    print(Path(args.config))
     helpers.set_config_data(args.config)
 
     # Start by creating a Jinja2 renderer and adding all our custom middleware and filters
@@ -101,6 +113,7 @@ def main() -> None:
             str(config.get_value("directories")["post_output_base_slug"]),
             note_file,
             data=rendered_note,
+            should_minify=args.minify,
         )
 
     # Sort all of the notes, with the newest on top
@@ -113,7 +126,12 @@ def main() -> None:
         "post": {"title": "Home"},
     }
     rendered_index = page.render("index", render_opts, env)
-    page.write(str(config.get_value("directories")["output"]), "index.html", data=rendered_index)
+    page.write(
+        str(config.get_value("directories")["output"]),
+        "index.html",
+        data=rendered_index,
+        should_minify=args.minify,
+    )
 
     # Provide a basic "how long did it run" message
     total_time = time() - start_time
