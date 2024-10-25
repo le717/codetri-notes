@@ -8,7 +8,7 @@ from jinja2 import Environment
 __all__ = ["meta", "render", "write"]
 
 
-def meta(content: str, /) -> dict:
+def meta(content: str, /) -> dict[str, str]:
     """Extract a note's metadata."""
     # Use the Python `configparser` for quickness for note metadata
     parser = ConfigParser(default_section="meta")

@@ -82,6 +82,7 @@ def main() -> None:
             "site": config.get_value("site"),
             "post": {
                 "title": meta["title"],
+                "subtitle": meta.get("subtitle", ""),
                 "content": content,
                 "date_published": date,
             },

@@ -11,7 +11,7 @@ height = 80
 alt_text = ""
 
 [site.nav]
-podcast = { label = "Podcast", url = "https://podcast.calebely.net/" }
+podcast = { label = "Podcast", url = "https://podcast.calebely.net" }
 portfolio = { label = "Portfolio", url = "https://calebely.net" }
 
 [directories]
