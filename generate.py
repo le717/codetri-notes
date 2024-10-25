@@ -83,6 +83,7 @@ def main() -> None:
             "post": {
                 "title": meta["title"],
                 "subtitle": meta.get("subtitle", ""),
+                "author": meta.get("author", ""),
                 "content": content,
                 "date_published": date,
             },
@@ -103,6 +104,7 @@ def main() -> None:
         all_notes.append({
             "title": meta["title"],
             "subtitle": meta.get("subtitle", ""),
+            "author": meta.get("author", ""),
             "date": date,
             "url": "{}/{}".format(
                 str(config.get_value("directories")["post_output_base_slug"]), note_file
