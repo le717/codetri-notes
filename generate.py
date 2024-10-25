@@ -102,6 +102,7 @@ def main() -> None:
         note_file = f"{meta['date']}-{quote_plus(slug)}.html"
         all_notes.append({
             "title": meta["title"],
+            "subtitle": meta.get("subtitle", ""),
             "date": date,
             "url": "{}/{}".format(
                 str(config.get_value("directories")["post_output_base_slug"]), note_file
