@@ -20,3 +20,9 @@ static = "usr/static"
 posts = "/var/www/obsidian/published"
 output = "dist"
 post_output_base_slug = "post"
+
+[post]
+
+[post.defaults]
+subtitle = ""
+author = "Caleb"

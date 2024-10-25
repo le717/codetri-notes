@@ -51,7 +51,7 @@ def main() -> None:
 
     # Start by creating a Jinja2 renderer and adding all our custom middleware and filters
     env = Environment(
-        loader=FileSystemLoader(config.get_value("directories")["theme"]),
+        loader=FileSystemLoader(config.get("directories")["theme"]),
         autoescape=select_autoescape(["html"]),
     )
     env.globals.update(helpers.ALL_MIDDLEWARE)
@@ -62,7 +62,7 @@ def main() -> None:
 
     # Generate each note
     all_notes = []
-    for f in config.get_value("directories")["posts"].iterdir():
+    for f in config.get("directories")["posts"].iterdir():
         # Filter out dot files
         if f.name.startswith("."):
             continue
@@ -79,11 +79,12 @@ def main() -> None:
 
         # Fill in all the content
         render_opts = {
-            "site": config.get_value("site"),
+            "site": config.get("site"),
             "post": {
                 "title": meta["title"],
-                "subtitle": meta.get("subtitle", ""),
-                "author": meta.get("author", ""),
+                "subtitle": meta.get("subtitle", config.get("post")["defaults"]["subtitle"]),
+                "author": meta.get("author", config.get("post")["defaults"]["author"]),
+                "cover": meta.get("cover", ""),
                 "content": content,
                 "date_published": date,
             },
@@ -103,18 +104,18 @@ def main() -> None:
         note_file = f"{meta['date']}-{quote_plus(slug)}.html"
         all_notes.append({
             "title": meta["title"],
-            "subtitle": meta.get("subtitle", ""),
-            "author": meta.get("author", ""),
+            "subtitle": meta.get("subtitle", config.get("post")["defaults"]["subtitle"]),
+            "author": meta.get("author", config.get("post")["defaults"]["author"]),
             "date": date,
             "url": "{}/{}".format(
-                str(config.get_value("directories")["post_output_base_slug"]), note_file
+                str(config.get("directories")["post_output_base_slug"]), note_file
             ),
         })
 
         # Write the generated note
         page.write(
-            str(config.get_value("directories")["output"]),
-            str(config.get_value("directories")["post_output_base_slug"]),
+            str(config.get("directories")["output"]),
+            str(config.get("directories")["post_output_base_slug"]),
             note_file,
             data=rendered_note,
             should_minify=args.minify,
@@ -126,12 +127,12 @@ def main() -> None:
     # Build up the index with all the current notes
     render_opts = {
         "posts": all_notes,
-        "site": config.get_value("site"),
+        "site": config.get("site"),
         "post": {"title": "Home"},
     }
     rendered_index = page.render("index", render_opts, env)
     page.write(
-        str(config.get_value("directories")["output"]),
+        str(config.get("directories")["output"]),
         "index.html",
         data=rendered_index,
         should_minify=args.minify,

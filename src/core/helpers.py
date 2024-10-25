@@ -15,12 +15,12 @@ def set_config_data(config_file: str) -> dict[str, Path]:
     """Get the config TOML for the generator."""
     data = tomllib.loads(Path(config_file).read_text())
     data["directories"] = {k: Path(v) for k, v in data["directories"].items()}
-    config.set_config(data)
+    config.set_initial(data)
 
 
 def make_dist() -> None:
     """Create all of the required directories."""
-    all_directories: dict[str, Path] = config.get_value("directories")
+    all_directories: dict[str, Path] = config.get("directories")
     dist_path: Path = all_directories["output"]
 
     # Delete any previous site generation first
