@@ -15,7 +15,7 @@ podcast = { label = "Podcast", url = "https://podcast.calebely.net/" }
 portfolio = { label = "Portfolio", url = "https://calebely.net" }
 
 [directories]
-theme = "usr/templates"
+theme = "/var/www/obsidian/site-theme"
 static = "usr/static"
 posts = "/var/www/obsidian/published"
 output = "dist"

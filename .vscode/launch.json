@@ -9,7 +9,7 @@
       "type": "debugpy",
       "request": "launch",
       "program": "generate.py",
-      "args": ["-c", "config-local.toml", "-m"],
+      "args": ["-c", "config-local.toml"],
       "console": "internalConsole",
       "justMyCode": true
     },

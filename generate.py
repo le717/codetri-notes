@@ -37,7 +37,7 @@ def get_arguments() -> argparse.Namespace:
     print("Executing with the following arguments:")
     for a in parser._actions:
         with suppress(AttributeError):
-            print(f"\t * {a.dest}={getattr(parsed, a.dest)}")
+            print(f"\t* {a.dest}={getattr(parsed, a.dest)}")
     return parsed
 
 
