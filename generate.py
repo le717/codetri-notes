@@ -1,5 +1,6 @@
 import argparse
 import re
+import tomllib
 from contextlib import suppress
 from datetime import datetime
 from time import time
@@ -93,11 +94,16 @@ def main() -> None:
                 "content": content,
                 "date_published": date,
             },
+            # Populated by markdown parser for nice "read time" stats
             "wordcount": {},
         }
 
         # If we have encountered a Markdown file, we need to render it to HTML first
+        # TODO: Highly considering only supporting markdown files for posts
         if f.suffix == ".md":
+            # TODO: Update all posts to use front-matter and toml for meta
+            if new_meta := [e for e in md_renderer.parse(content) if e.type == "front_matter"]:
+                parsed_new_meta = tomllib.loads(new_meta[0].content)
             render_opts["post"]["content"] = md_renderer.render(content, render_opts)
 
         # Render the page with the post content
