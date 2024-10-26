@@ -17,6 +17,7 @@ portfolio = { label = "Portfolio", url = "https://calebely.net" }
 [directories]
 theme = "/var/www/obsidian/site-theme"
 static = "/var/www/obsidian/site-theme/static"
+media = "/var/www/obsidian/attachments"
 posts = "/var/www/obsidian/published"
 output = "dist"
 post_output_base_slug = "post"
