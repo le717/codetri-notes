@@ -30,8 +30,10 @@ def make_dist() -> None:
     # Create the directory the notes live in
     (dist_path / all_directories["post_output_base_slug"]).mkdir(parents=True, exist_ok=True)
 
-    # Create the images directory
-    (dist_path / "images").mkdir(parents=True, exist_ok=True)
+    # Create the media directory
+    shutil.copytree(
+        all_directories["media"], (dist_path / all_directories["media"].stem), dirs_exist_ok=True
+    )
 
     # Create the site static files folders and files
     shutil.copytree(all_directories["static"], (dist_path / "static"), dirs_exist_ok=True)

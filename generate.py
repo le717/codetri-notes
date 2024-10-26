@@ -68,7 +68,7 @@ def main() -> None:
             continue
 
         # Get the note content and metadata
-        content = f.read_text()
+        content = f.read_text(encoding="utf-8")
         meta = page.meta(content)
 
         # Remove the raw meta from the note
