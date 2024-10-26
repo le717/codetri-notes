@@ -101,7 +101,7 @@ def main() -> None:
         slug = "-".join(m.lower() for m in re.findall(r"\w+", meta["title"], flags=re.I))
 
         # Keep a record of the note so we can generate the index when we are done
-        note_file = f"{meta['date']}-{quote_plus(slug)}.html"
+        note_file = f"{quote_plus(slug)}.html"
         all_notes.append({
             "title": meta["title"],
             "subtitle": meta.get("subtitle", config.get("post")["defaults"]["subtitle"]),
