@@ -7,8 +7,8 @@ from urllib.parse import quote_plus
 
 import mistletoe
 from jinja2 import Environment, FileSystemLoader, select_autoescape
-from mistletoe.contrib.github_wiki import GithubWikiRenderer
 
+from src.codetri_renderer import CodeTriRenderer
 from src.core import config, helpers, page
 
 
@@ -92,7 +92,7 @@ def main() -> None:
 
         # If we have encountered a Markdown file, we need to render it to HTML first
         if f.suffix == ".md":
-            render_opts["post"]["content"] = mistletoe.markdown(content, GithubWikiRenderer)
+            render_opts["post"]["content"] = mistletoe.markdown(content, CodeTriRenderer)
 
         # Render the page with the post content
         rendered_note = page.render("post", render_opts, env)
