@@ -5,10 +5,11 @@ from datetime import datetime
 from time import time
 from urllib.parse import quote_plus
 
-import mistletoe
 from jinja2 import Environment, FileSystemLoader, select_autoescape
+from markdown_it import MarkdownIt
+from mdit_py_plugins.front_matter import front_matter_plugin
+from mdit_py_plugins.wordcount import wordcount_plugin
 
-from src.codetri_renderer import CodeTriRenderer
 from src.core import config, helpers, page
 
 
@@ -57,6 +58,10 @@ def main() -> None:
     env.globals.update(helpers.ALL_MIDDLEWARE)
     env.filters.update(helpers.ALL_FILTERS)
 
+    # Create our markdown -> html renderer
+    md_renderer = MarkdownIt("gfm-like").use(front_matter_plugin).use(wordcount_plugin)
+    md_renderer.options["xhtmlOut"] = False
+
     # Create all of the directories that we need for dist
     helpers.make_dist()
 
@@ -88,11 +93,12 @@ def main() -> None:
                 "content": content,
                 "date_published": date,
             },
+            "wordcount": {},
         }
 
         # If we have encountered a Markdown file, we need to render it to HTML first
         if f.suffix == ".md":
-            render_opts["post"]["content"] = mistletoe.markdown(content, CodeTriRenderer)
+            render_opts["post"]["content"] = md_renderer.render(content, render_opts)
 
         # Render the page with the post content
         rendered_note = page.render("post", render_opts, env)
