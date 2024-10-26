@@ -14,8 +14,9 @@ def meta(content: str, /) -> dict[str, str]:
     parser = ConfigParser(default_section="meta")
 
     # Get the metadata
+    start_tag = "[meta]"
     end_tag = "[endmeta]"
-    raw_text = content[: content.find(end_tag) + len(end_tag)]
+    raw_text = content[content.find(start_tag) : content.find(end_tag) + len(end_tag)]
     parser.read_string(raw_text)
 
     # Pull the metadata out of the base key and append the raw text
