@@ -7,12 +7,18 @@ from typing import Any
 APP_CONFIG: ContextVar[dict[str, dict[str, Any]]] = ContextVar("config", default={})
 
 
-__all__ = ["set_initial", "get"]
+__all__ = ["get", "set", "set_initial"]
 
 
 def get(key: str) -> Any:
     config = APP_CONFIG.get()
     return config[key]
+
+
+def set(key: str, value: Any) -> None:
+    config = APP_CONFIG.get()
+    config[key] = value
+    APP_CONFIG.set(config)
 
 
 def set_initial(config_file: Path) -> None:
