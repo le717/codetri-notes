@@ -3,6 +3,7 @@ import re
 import tomllib
 from contextlib import suppress
 from datetime import datetime
+from pathlib import Path
 from time import time
 from urllib.parse import quote_plus
 
@@ -49,7 +50,7 @@ def main() -> None:
 
     # Resolve the config file we are to use and load the contents therein
     args = get_arguments()
-    helpers.set_config_data(args.config)
+    config.set_initial(Path(args.config))
 
     # Start by creating a Jinja2 renderer and adding all our custom middleware and filters
     env = Environment(
@@ -90,11 +91,11 @@ def main() -> None:
                 "title": meta["title"],
                 "subtitle": meta.get("subtitle", config.get("post")["defaults"]["subtitle"]),
                 "author": meta.get("author", config.get("post")["defaults"]["author"]),
-                "cover": meta.get("cover", ""),
                 "content": content,
                 "date_published": date,
             },
             # Populated by markdown parser for nice "read time" stats
+            # TODO: Have wordcount saved into page meta
             "wordcount": {},
         }
 

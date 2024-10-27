@@ -8,14 +8,7 @@ from typing import Callable
 from src.core import config
 
 
-__all__ = ["ALL_FILTERS", "ALL_MIDDLEWARE", "duration", "set_config_data", "make_dist"]
-
-
-def set_config_data(config_file: str) -> dict[str, Path]:
-    """Get the config TOML for the generator."""
-    data = tomllib.loads(Path(config_file).read_text())
-    data["directories"] = {k: Path(v) for k, v in data["directories"].items()}
-    config.set_initial(data)
+__all__ = ["ALL_FILTERS", "ALL_MIDDLEWARE", "duration", "make_dist"]
 
 
 def make_dist() -> None:
@@ -52,7 +45,7 @@ def format_datetime(dt: datetime, fmt: str) -> str:
 
 
 def duration(seconds: int) -> str:
-    # https://stackoverflow.com/a/3856312
+    """Taken from https://stackoverflow.com/a/3856312"""
     hours = floor(seconds / 3600)
     mins = floor(seconds / 60 % 60)
     secs = floor(seconds % 60)
