@@ -1,5 +1,4 @@
 import shutil
-import tomllib
 from datetime import date, datetime
 from math import floor
 from pathlib import Path
@@ -8,7 +7,7 @@ from typing import Callable
 from src.core import config
 
 
-__all__ = ["ALL_FILTERS", "ALL_MIDDLEWARE", "duration", "make_dist"]
+__all__ = ["ALL_FILTERS", "ALL_GLOBALS", "duration", "make_dist"]
 
 
 def make_dist() -> None:
@@ -56,8 +55,13 @@ def duration(seconds: int) -> str:
     return f"{mins:02d}:{secs:02d}"
 
 
-ALL_FILTERS = {}
-ALL_MIDDLEWARE: dict[str, Callable] = {
-    "current_year": current_year(),
-    "format_datetime": format_datetime,
-}
+def ALL_FILTERS() -> dict:
+    return {}
+
+
+def ALL_GLOBALS() -> dict[str, Callable]:
+    return {
+        "current_year": current_year(),
+        "format_datetime": format_datetime,
+        "site": config.get("site"),
+    }

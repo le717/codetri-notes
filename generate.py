@@ -57,8 +57,8 @@ def main() -> None:
         loader=FileSystemLoader(config.get("directories")["theme"]),
         autoescape=select_autoescape(["html"]),
     )
-    env.globals.update(helpers.ALL_MIDDLEWARE)
-    env.filters.update(helpers.ALL_FILTERS)
+    env.globals.update(helpers.ALL_GLOBALS())
+    env.filters.update(helpers.ALL_FILTERS())
 
     # Create our markdown -> html renderer
     md_renderer = MarkdownIt("gfm-like").use(front_matter_plugin).use(wordcount_plugin)
@@ -86,7 +86,6 @@ def main() -> None:
 
         # Fill in all the content
         render_opts = {
-            "site": config.get("site"),
             "post": {
                 "title": meta["title"],
                 "subtitle": meta.get("subtitle", config.get("post")["defaults"]["subtitle"]),
@@ -140,7 +139,6 @@ def main() -> None:
     # Build up the index with all the current notes
     render_opts = {
         "posts": all_notes,
-        "site": config.get("site"),
         "post": {"title": "Home"},
     }
     rendered_index = page.render("index", render_opts, env)
