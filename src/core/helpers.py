@@ -55,8 +55,12 @@ def duration(seconds: int) -> str:
     return f"{mins:02d}:{secs:02d}"
 
 
+def intcomma(val: int) -> str:
+    return f"{val:,}"
+
+
 def ALL_FILTERS() -> dict:
-    return {}
+    return {"intcomma": intcomma}
 
 
 def ALL_GLOBALS() -> dict[str, Callable]:
