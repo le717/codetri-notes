@@ -92,6 +92,7 @@ def main() -> None:
                 "author": meta.get("author", config.get("post")["defaults"]["author"]),
                 "content": content,
                 "date_published": date,
+                "tags": meta.get("tags", ""),
             },
             # Populated by markdown parser for nice "read time" stats
             # TODO: Have wordcount saved into page meta
