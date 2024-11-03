@@ -59,7 +59,7 @@ def main() -> None:
         autoescape=select_autoescape(["html"]),
     )
     env.globals.update(helpers.ALL_GLOBALS())
-    env.filters.update(helpers.ALL_FILTERS())
+    env.filters.update(helpers.ALL_FILTERS)
 
     # Create our markdown -> html renderer
     md_renderer = MarkdownIt("gfm-like").use(front_matter_plugin).use(wordcount_plugin)

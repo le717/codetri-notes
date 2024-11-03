@@ -59,8 +59,7 @@ def intcomma(val: int) -> str:
     return f"{val:,}"
 
 
-def ALL_FILTERS() -> dict:
-    return {"intcomma": intcomma}
+ALL_FILTERS = {"intcomma": intcomma}
 
 
 def ALL_GLOBALS() -> dict[str, Callable]:
