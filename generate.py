@@ -12,7 +12,8 @@ from markdown_it import MarkdownIt
 from mdit_py_plugins.front_matter import front_matter_plugin
 from mdit_py_plugins.wordcount import wordcount_plugin
 
-from src.core import config, helpers, page
+from src.app import config
+from src.core import helpers, page
 
 
 __all__ = ["main"]

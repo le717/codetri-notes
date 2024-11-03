@@ -4,7 +4,7 @@ from math import floor
 from pathlib import Path
 from typing import Callable
 
-from src.core import config
+from src.app import config
 
 
 __all__ = ["ALL_FILTERS", "ALL_GLOBALS", "duration", "make_dist"]
