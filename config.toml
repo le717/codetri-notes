@@ -23,6 +23,8 @@ output = "dist"
 post_output_base_slug = "post"
 
 [post]
+index_template = "index.jinja2"
+post_template = "post.jinja2"
 
 [post.defaults]
 subtitle = ""
