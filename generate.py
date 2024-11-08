@@ -81,7 +81,7 @@ def main() -> None:
 
         # Convert some data into native objects/and fill in default values to make things nicer
         raw_meta = front_matter[0].content
-        meta = tomllib.loads(page.replace_curly_quotes(raw_meta))
+        meta = tomllib.loads(helpers.replace_curly_quotes(raw_meta))
         meta["subtitle"] = meta.get("subtitle", config.get("post")["defaults"]["subtitle"])
         meta["author"] = meta.get("author", config.get("post")["defaults"]["author"])
 

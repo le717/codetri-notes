@@ -7,7 +7,14 @@ from typing import Callable
 from src.app import config
 
 
-__all__ = ["ALL_FILTERS", "ALL_GLOBALS", "duration", "make_dist", "remove_falsey_items"]
+__all__ = [
+    "ALL_FILTERS",
+    "ALL_GLOBALS",
+    "duration",
+    "make_dist",
+    "remove_falsey_items",
+    "replace_curly_quotes",
+]
 
 
 def current_year() -> int:
@@ -30,6 +37,11 @@ def duration(seconds: int) -> str:
 def remove_falsey_items(l: list) -> list:
     """Remove falsey items from a list."""
     return [v for v in l if v]
+
+
+def replace_curly_quotes(text: str) -> str:
+    """Replace any curly quotes in the text with straight quotes."""
+    return text.replace("“", '"').replace("”", '"').replace("’", "'")
 
 
 def make_dist() -> None:
