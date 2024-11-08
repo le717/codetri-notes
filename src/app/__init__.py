@@ -33,14 +33,20 @@ def get_arguments() -> argparse.Namespace:
         help="Should the generated files be minified? (default: no)",
     )
     # TODO: Add verbosity param
-    parsed = parser.parse_args()
+    args = parser.parse_args()
 
     # Display the argument values used
     print("Executing with the following arguments:")
     for a in parser._actions:
         with suppress(AttributeError):
-            print(f"\t* {a.dest}={getattr(parsed, a.dest)}")
-    return parsed
+            print(f"\t* {a.dest}={getattr(args, a.dest)}")
+    return args
+
+
+def render_link_no_tracking(self, tokens, idx, options, env):
+    """Add "don't track" signals to URLs."""
+    tokens[idx].attrSet("rel", "noopener noreferrer")
+    return self.renderToken(tokens, idx, options, env)
 
 
 def create_app() -> dict[str, dict[str, Any]]:
@@ -52,6 +58,7 @@ def create_app() -> dict[str, dict[str, Any]]:
     # Create our markdown -> html renderer
     markdown = MarkdownIt("gfm-like").use(front_matter_plugin).use(wordcount_plugin)
     markdown.options["xhtmlOut"] = False
+    markdown.add_render_rule("link_open", render_link_no_tracking)
 
     # Create our jinja2 html renderer
     jinja = Environment(
