@@ -70,29 +70,34 @@ def main() -> None:
 
     # Generate each note
     all_notes = []
-    for f in config.get("directories")["posts"].iterdir():
-        # Filter out dot files
-        if f.name.startswith("."):
+    for f in config.get("directories")["posts"].glob("*.md"):
+        # Attempt to find the meta info
+        content = f.read_text(encoding="utf-8")
+        if not (
+            front_matter := [e for e in md_renderer.parse(content) if e.type == "front_matter"]
+        ):
+            print(f"Post {f.name} missing meta")
             continue
 
-        # Get the note content and metadata
-        content = f.read_text(encoding="utf-8")
-        meta = page.meta(content)
+        # Convert some data into native objects/and fill in default values to make things nicer
+        raw_meta = front_matter[0].content
+        meta = tomllib.loads(page.replace_curly_quotes(raw_meta))
+        meta["date"] = datetime.fromisoformat(meta["date"])
+        meta["subtitle"] = meta.get("subtitle", config.get("post")["defaults"]["subtitle"])
+        meta["author"] = meta.get("author", config.get("post")["defaults"]["author"])
+        # TODO: default tags, if present
 
         # Remove the raw meta from the note
-        content = content.replace(meta["raw_text"], "").strip()
-
-        # Convert the publish date to a datetime object for better usage
-        date = datetime.fromisoformat(meta["date"])
+        content = content.replace(raw_meta, "").strip()
 
         # Fill in all the content
         render_opts = {
             "post": {
                 "title": meta["title"],
-                "subtitle": meta.get("subtitle", config.get("post")["defaults"]["subtitle"]),
-                "author": meta.get("author", config.get("post")["defaults"]["author"]),
+                "subtitle": meta["subtitle"],
+                "author": meta["author"],
                 "content": content,
-                "date_published": date,
+                "date_published": meta["date"],
                 "tags": meta.get("tags", ""),
             },
             # Populated by markdown parser for nice "read time" stats
@@ -100,15 +105,8 @@ def main() -> None:
             "wordcount": {},
         }
 
-        # If we have encountered a Markdown file, we need to render it to HTML first
-        # TODO: Highly considering only supporting markdown files for posts
-        if f.suffix == ".md":
-            # TODO: Update all posts to use front-matter and toml for meta
-            if new_meta := [e for e in md_renderer.parse(content) if e.type == "front_matter"]:
-                parsed_new_meta = tomllib.loads(new_meta[0].content)
-            render_opts["post"]["content"] = md_renderer.render(content, render_opts)
-
         # Render the page with the post content
+        render_opts["post"]["content"] = md_renderer.render(content, render_opts)
         rendered_note = page.render("post", render_opts, env)
 
         # Automatically generate a slug from the post title
@@ -120,9 +118,9 @@ def main() -> None:
         note_file = f"{quote_plus(slug)}.html"
         all_notes.append({
             "title": meta["title"],
-            "subtitle": meta.get("subtitle", config.get("post")["defaults"]["subtitle"]),
-            "author": meta.get("author", config.get("post")["defaults"]["author"]),
-            "date": date,
+            "subtitle": meta["subtitle"],
+            "author": meta["author"],
+            "date": meta["date"],
             "url": "{}/{}".format(
                 str(config.get("directories")["post_output_base_slug"]), note_file
             ),

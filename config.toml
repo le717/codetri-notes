@@ -29,3 +29,4 @@ post_template = "post.jinja2"
 [post.defaults]
 subtitle = ""
 author = "Caleb"
+tags = []
