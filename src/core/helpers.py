@@ -7,7 +7,29 @@ from typing import Callable
 from src.app import config
 
 
-__all__ = ["ALL_FILTERS", "ALL_GLOBALS", "duration", "make_dist"]
+__all__ = ["ALL_FILTERS", "ALL_GLOBALS", "duration", "make_dist", "remove_falsey_items"]
+
+
+def current_year() -> int:
+    """Get the current year."""
+    return date.today().year
+
+
+def duration(seconds: int) -> str:
+    """Taken from https://stackoverflow.com/a/3856312"""
+    hours = floor(seconds / 3600)
+    mins = floor(seconds / 60 % 60)
+    secs = floor(seconds % 60)
+
+    # Only display the hours if needed
+    if hours > 0:
+        return f"{hours:02d}:{mins:02d}:{secs:02d}"
+    return f"{mins:02d}:{secs:02d}"
+
+
+def remove_falsey_items(l: list) -> list:
+    """Remove falsey items from a list."""
+    return [v for v in l if v]
 
 
 def make_dist() -> None:
@@ -31,28 +53,11 @@ def make_dist() -> None:
     shutil.copytree(all_directories["static"], (dist_path / "static"), dirs_exist_ok=True)
 
 
-def current_year() -> int:
-    """Get the current year."""
-    return date.today().year
-
-
 def format_datetime(dt: datetime, fmt: str) -> str:
     """Format a datetime object to a datestring."""
     if fmt == "iso":
         return dt.isoformat()
     return dt.strftime(fmt)
-
-
-def duration(seconds: int) -> str:
-    """Taken from https://stackoverflow.com/a/3856312"""
-    hours = floor(seconds / 3600)
-    mins = floor(seconds / 60 % 60)
-    secs = floor(seconds % 60)
-
-    # Only display the hours if needed
-    if hours > 0:
-        return f"{hours:02d}:{mins:02d}:{secs:02d}"
-    return f"{mins:02d}:{secs:02d}"
 
 
 def intcomma(val: int) -> str:

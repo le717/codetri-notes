@@ -84,7 +84,30 @@ def main() -> None:
         meta = tomllib.loads(page.replace_curly_quotes(raw_meta))
         meta["subtitle"] = meta.get("subtitle", config.get("post")["defaults"]["subtitle"])
         meta["author"] = meta.get("author", config.get("post")["defaults"]["author"])
-        # TODO: default tags, if present
+
+        # If there are no tags for the post, set the key. If there are default tags, use them
+        meta["tags"] = meta.get("tags", [])
+
+        # If there are tags, and it's a single string value, wrap it in a list
+        # for a consistent render context variable
+        if isinstance(meta["tags"], str):
+            meta["tags"] = [meta["tags"]]
+        meta["tags"] = helpers.remove_falsey_items(meta["tags"])
+
+        # Pull out any default post tags
+        default_tags: str | list[str] = config.get("post")["defaults"].get("tags", [])
+        default_tags_before: bool = config.get("post")["defaults"].get("tags_before", True)
+
+        # If the default tags are just a string, wrap it in a list
+        if isinstance(default_tags, str):
+            default_tags = [default_tags]
+        default_tags = helpers.remove_falsey_items(default_tags)
+
+        # Order the default and specific are requested
+        if default_tags_before:
+            meta["tags"] = default_tags + meta["tags"]
+        else:
+            meta["tags"] = meta["tags"] + default_tags
 
         # Remove the raw meta from the note
         content = content.replace(raw_meta, "").strip()

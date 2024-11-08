@@ -4,6 +4,9 @@ subtitle = "Sentences on faith, life, and code."
 domain = "https://notes.calebely.net"
 date_format = "%B %d, %Y"
 
+# Fill this in to create a distinct home page that doesn't list all posts
+# index_template = ""
+
 [site.logo]
 file = "logo.svg"
 width = 80
@@ -29,4 +32,10 @@ post_template = "post.jinja2"
 [post.defaults]
 subtitle = ""
 author = "Caleb"
-tags = []
+
+# Fill this in to provide default tags. Can be `str` or `list[str]`
+# tags = ""
+
+# true: place default tags before post specific (default if not set)
+# false: place default tags after post specific
+# tags_before = true
