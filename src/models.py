@@ -24,13 +24,14 @@ class Page:
     def __post_init__(self) -> None:
         self.from_file()
 
+    @staticmethod
     def _replace_curly_quotes(text: str) -> str:
         """Replace any curly quotes in the text with straight quotes."""
         return text.replace("“", '"').replace("”", '"').replace("’", "'")
 
     def from_file(self) -> None:
         """Read a page's content into memory."""
-        self.content = self.file.read_text(encoding="utf-8")
+        self.content = self._replace_curly_quotes(self.file.read_text(encoding="utf-8"))
 
     def to_html(self, ctx: dict) -> str:
         """Render a page's content to a complete HTML page."""
@@ -55,9 +56,9 @@ class Post(Page):
         # Extract the meta content from the page content,
         # then remove it because we don't want it in the content
         super().__post_init__()
-        self.parse_meta()
-        self.content = self._replace_curly_quotes(self.content.replace(self.raw_meta, "").strip())
         self.parse_content()
+        self.parse_meta()
+        self.content = self.content.replace(self.raw_meta, "").strip()
 
     @property
     def template_name(self) -> str:
@@ -78,10 +79,10 @@ class Post(Page):
 
         # Attempt to find the meta info
         if not (front_matter := [e for e in self.parsed_content if e.type == "front_matter"]):
-            raise RuntimeError("Post meta must be present")
+            raise RuntimeError(f"Post {self.file.name} is missing meta")
 
         # Convert some data into native objects/and fill in default values to make things nicer
-        page_meta = tomllib.loads(self._replace_curly_quotes(front_matter[0].content))
+        page_meta = tomllib.loads(front_matter[0].content)
         page_meta["subtitle"] = page_meta.get(
             "subtitle", config.get("post")["defaults"]["subtitle"]
         )
@@ -113,7 +114,7 @@ class Post(Page):
 
         # Store the meta info, both parsed and raw text
         self.meta = page_meta
-        self.raw_meta = self._replace_curly_quotes(front_matter[0].content)
+        self.raw_meta = front_matter[0].content
 
 
 class PostIndex(Page):

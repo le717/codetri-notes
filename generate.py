@@ -72,7 +72,7 @@ def main() -> None:
     all_notes = []
     for f in config.get("directories")["posts"].glob("*.md"):
         # Attempt to find the meta info
-        content = f.read_text(encoding="utf-8")
+        content = helpers.replace_curly_quotes(f.read_text(encoding="utf-8"))
         if not (
             front_matter := [e for e in md_renderer.parse(content) if e.type == "front_matter"]
         ):
@@ -81,7 +81,7 @@ def main() -> None:
 
         # Convert some data into native objects/and fill in default values to make things nicer
         raw_meta = front_matter[0].content
-        meta = tomllib.loads(helpers.replace_curly_quotes(raw_meta))
+        meta = tomllib.loads(raw_meta)
         meta["subtitle"] = meta.get("subtitle", config.get("post")["defaults"]["subtitle"])
         meta["author"] = meta.get("author", config.get("post")["defaults"]["author"])
 
