@@ -1,7 +1,7 @@
 [site]
 title = "Live Life Real"
 subtitle = "Sentences on faith, life, and code."
-domain = "https://notes.calebely.net"
+domain = "https://blog.calebely.net"
 date_format = "%B %d, %Y"
 
 # Fill this in to create a distinct home page that doesn't list all posts
