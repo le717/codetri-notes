@@ -64,7 +64,7 @@ def main() -> None:
     # Create our markdown -> html renderer
     md_renderer = MarkdownIt("gfm-like").use(front_matter_plugin).use(wordcount_plugin)
     md_renderer.options["xhtmlOut"] = False
-    md_renderer.add_render_rule("link_open", render_rules.render_link_no_tracking)
+    md_renderer.add_render_rule("link_open", render_rules.render_link_open)
 
     # Create all of the directories that we need for dist
     helpers.make_dist()
@@ -72,6 +72,9 @@ def main() -> None:
     # Generate each note
     all_notes = []
     for f in config.get("directories")["posts"].glob("*.md"):
+        if f.name == "template.md":
+            continue
+
         # Attempt to find the meta info
         content = helpers.replace_curly_quotes(f.read_text(encoding="utf-8"))
         if not (

@@ -43,10 +43,6 @@ def get_arguments() -> argparse.Namespace:
     return args
 
 
-def render_link_new(self, tokens, idx: int, options, env) -> str:
-    return "</li>\n"
-
-
 def create_app() -> dict[str, dict[str, Any]]:
     # Get the arguments the script was invoked with and set up the app config
     args = get_arguments()
@@ -56,8 +52,7 @@ def create_app() -> dict[str, dict[str, Any]]:
     # Create our markdown -> html renderer
     markdown = MarkdownIt("gfm-like").use(front_matter_plugin).use(wordcount_plugin)
     markdown.options["xhtmlOut"] = False
-    markdown.add_render_rule("link_open", render_rules.render_link_no_tracking)
-    # markdown.add_render_rule("link", render_link_new)
+    markdown.add_render_rule("link_open", render_rules.render_link_open)
 
     # Create our jinja2 html renderer
     jinja = Environment(
