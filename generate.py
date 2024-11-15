@@ -12,7 +12,7 @@ from markdown_it import MarkdownIt
 from mdit_py_plugins.front_matter import front_matter_plugin
 from mdit_py_plugins.wordcount import wordcount_plugin
 
-from src.app import config
+from src.app import config, render_rules
 from src.core import helpers, page
 
 
@@ -64,6 +64,7 @@ def main() -> None:
     # Create our markdown -> html renderer
     md_renderer = MarkdownIt("gfm-like").use(front_matter_plugin).use(wordcount_plugin)
     md_renderer.options["xhtmlOut"] = False
+    md_renderer.add_render_rule("link_open", render_rules.render_link_no_tracking)
 
     # Create all of the directories that we need for dist
     helpers.make_dist()

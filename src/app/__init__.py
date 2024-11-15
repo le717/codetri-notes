@@ -10,7 +10,7 @@ from mdit_py_plugins.front_matter import front_matter_plugin
 from mdit_py_plugins.wordcount import wordcount_plugin
 
 from ..core import helpers
-from . import config
+from . import config, render_rules
 
 
 APP: ContextVar[dict[str, dict[str, Any]]] = ContextVar("app", default={})
@@ -43,10 +43,8 @@ def get_arguments() -> argparse.Namespace:
     return args
 
 
-def render_link_no_tracking(self, tokens, idx, options, env):
-    """Add "don't track" signals to URLs."""
-    tokens[idx].attrSet("rel", "noopener noreferrer")
-    return self.renderToken(tokens, idx, options, env)
+def render_link_new(self, tokens, idx: int, options, env) -> str:
+    return "</li>\n"
 
 
 def create_app() -> dict[str, dict[str, Any]]:
@@ -58,7 +56,8 @@ def create_app() -> dict[str, dict[str, Any]]:
     # Create our markdown -> html renderer
     markdown = MarkdownIt("gfm-like").use(front_matter_plugin).use(wordcount_plugin)
     markdown.options["xhtmlOut"] = False
-    markdown.add_render_rule("link_open", render_link_no_tracking)
+    markdown.add_render_rule("link_open", render_rules.render_link_no_tracking)
+    # markdown.add_render_rule("link", render_link_new)
 
     # Create our jinja2 html renderer
     jinja = Environment(
