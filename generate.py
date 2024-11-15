@@ -136,12 +136,14 @@ def main() -> None:
         rendered_note = page.render("post", render_opts, env)
 
         # Automatically generate a slug from the post title
-        slug = "-".join(
-            m.lower() for m in re.findall(r"\w+", meta["title"].replace("'", ""), flags=re.I)
-        )
+        # TODO: Use this method in generator v2
+        # slug = "-".join(
+        #     m.lower() for m in re.findall(r"\w+", meta["title"].replace("'", ""), flags=re.I)
+        # )
+        # note_file = f"{quote_plus(slug)}.html"
 
         # Keep a record of the note so we can generate the index when we are done
-        note_file = f"{quote_plus(slug)}.html"
+        note_file = quote_plus(f.with_suffix(".html").name)
         all_notes.append({
             "title": meta["title"],
             "subtitle": meta["subtitle"],
