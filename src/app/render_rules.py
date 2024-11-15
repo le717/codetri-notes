@@ -8,6 +8,7 @@ def render_link_open(self, tokens, idx, options, env):
 
     # If the link target is an internal link, indicated by a markdown file name,
     # replace it with the generated slug
+    # TODO: Fill this in alongside generate2
     # if tokens[idx].attrs["href"] in ...: ...
 
     return self.renderToken(tokens, idx, options, env)

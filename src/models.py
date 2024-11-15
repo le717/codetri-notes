@@ -1,7 +1,9 @@
+import re
 import tomllib
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
+from urllib.parse import quote_plus
 
 import minify_html
 
@@ -58,6 +60,7 @@ class Post(Page):
         super().__post_init__()
         self.parse_content()
         self.parse_meta()
+        self.generate_slug()
         self.content = self.content.replace(self.raw_meta, "").strip()
 
     @property
@@ -68,6 +71,13 @@ class Post(Page):
         """Convert the page content from Markdown to HTML."""
         # `self.meta` is provided to add the `wordcount` info to the post meta
         return current_app()["renderers"]["markdown"].render(self.content, self.meta)
+
+    def generate_slug(self) -> None:
+        """Generate a slug for this post."""
+        slug = "-".join(
+            m.lower() for m in re.findall(r"\w+", self.meta["title"].replace("'", ""), flags=re.I)
+        )
+        self.slug = quote_plus(f"{slug}.html")
 
     def parse_content(self) -> None:
         # Parse the content of the markdown file and store the AST for later
