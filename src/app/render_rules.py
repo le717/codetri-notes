@@ -6,9 +6,8 @@ def render_link_open(self, tokens, idx, options, env):
     # Add "don't track" signals to an `<a>` tag
     tokens[idx].attrSet("rel", "noopener noreferrer")
 
-    # If the link target is an internal link, indicated by a markdown file name,
+    # When possible, if the link target is an internal link, indicated by a markdown file name,
     # replace it with the generated slug
-    # TODO: Fill this in alongside generate2
-    # if tokens[idx].attrs["href"] in ...: ...
-
+    if "all_urls" in env and tokens[idx].attrs["href"] in env["all_urls"]:
+        tokens[idx].attrs["href"] = env["all_urls"][tokens[idx].attrs["href"]]
     return self.renderToken(tokens, idx, options, env)
