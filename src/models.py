@@ -29,7 +29,7 @@ class Page:
     @staticmethod
     def _replace_curly_quotes(text: str) -> str:
         """Replace any curly quotes in the text with straight quotes."""
-        return text.replace("“", '"').replace("”", '"').replace("’", "'")
+        return text.replace("“", '"').replace("”", '"').replace("‘", "'").replace("’", "'")
 
     def from_file(self) -> None:
         """Read a page's content into memory."""

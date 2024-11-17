@@ -41,7 +41,7 @@ def remove_falsey_items(l: list) -> list:
 
 def replace_curly_quotes(text: str) -> str:
     """Replace any curly quotes in the text with straight quotes."""
-    return text.replace("“", '"').replace("”", '"').replace("’", "'")
+    return text.replace("“", '"').replace("”", '"').replace("‘", "'").replace("’", "'")
 
 
 def make_dist() -> None:
