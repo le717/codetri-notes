@@ -33,7 +33,7 @@ class Page:
         """Read a page's content into memory."""
         self.content = self._replace_curly_quotes(self.file.read_text(encoding="utf-8"))
 
-    def to_html(self, ctx: dict) -> str:
+    def to_html(self, /, ctx: dict[str, Any]) -> str:
         """Render a page's content to a complete HTML page."""
         return current_app()["render"]["jinja"].get_template(self.template_name).render(ctx)
 
@@ -59,6 +59,7 @@ class Post(Page):
         self.parse_content()
         self.parse_meta()
         self.generate_slug()
+        self.generate_url()
         self.content = self.content.replace(self.raw_meta, "").strip()
 
     @property
@@ -72,10 +73,16 @@ class Post(Page):
 
     def generate_slug(self) -> None:
         """Generate a slug for this post."""
-        slug = "-".join(
-            m.lower() for m in re.findall(r"\w+", self.meta["title"].replace("'", ""), flags=re.I)
+        self.meta["slug"] = quote_plus(
+            "-".join(
+                m.lower()
+                for m in re.findall(r"\w+", self.meta["title"].replace("'", ""), flags=re.I)
+            )
         )
-        self.slug = quote_plus(f"{slug}.html")
+
+    def generate_url(self) -> None:
+        """Generate a URL for this post."""
+        self.meta["url"] = "/{}/{}".format(str(config.get("post")["output_dir"]), self.meta["slug"])
 
     def parse_content(self) -> None:
         # Parse the content of the markdown file and store the AST for later
