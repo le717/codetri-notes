@@ -83,5 +83,6 @@ def ALL_GLOBALS() -> dict[str, Callable]:
     return {
         "current_year": current_year(),
         "format_datetime": format_datetime,
+        # TODO: remove from globals
         "site": config.get("site"),
     }
