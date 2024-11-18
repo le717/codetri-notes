@@ -20,6 +20,11 @@ def main() -> None:
         file.name: models.Post(file) for file in config.get("directories")["posts"].glob("*.md")
     }
 
+    # Sort all of the posts, with the newest on top
+    all_posts = {
+        k: v for k, v in sorted(all_posts.items(), key=lambda x: x[1].meta["date"], reverse=True)
+    }
+
     # Create a mapping between each post and it's final url
     post_url_mapping = {
         post_model.file.name: post_model.meta["url"] for post_model in all_posts.values()
