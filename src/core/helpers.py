@@ -77,12 +77,4 @@ def intcomma(val: int) -> str:
 
 
 ALL_FILTERS = {"intcomma": intcomma}
-
-
-def ALL_GLOBALS() -> dict[str, Callable]:
-    return {
-        "current_year": current_year(),
-        "format_datetime": format_datetime,
-        # TODO: remove from globals
-        "site": config.get("site"),
-    }
+ALL_GLOBALS = {"current_year": current_year(), "format_datetime": format_datetime}

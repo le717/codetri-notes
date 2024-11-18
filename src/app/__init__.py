@@ -59,8 +59,8 @@ def create_app() -> dict[str, dict[str, Any]]:
         loader=FileSystemLoader(config.get("directories")["theme"]),
         autoescape=select_autoescape(["html"]),
     )
-    # TODO: I don't like globals being a method
-    jinja.globals.update(helpers.ALL_GLOBALS())
+    jinja.globals.update(helpers.ALL_GLOBALS)
+    jinja.globals.update({"site": config.get("site")})
     jinja.filters.update(helpers.ALL_FILTERS)
 
     # Put everything together

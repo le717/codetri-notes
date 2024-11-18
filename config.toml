@@ -4,8 +4,8 @@ subtitle = "Sentences on faith, life, and code."
 domain = "https://blog.calebely.net"
 date_format = "%B %d, %Y"
 
-# Fill this in to create a distinct home page that doesn't list all posts
-# index_template = ""
+# Uncomment in to create a distinct home page
+# index_template = "home.jinja2"
 
 [site.logo]
 file = "logo.svg"

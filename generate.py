@@ -58,7 +58,8 @@ def main() -> None:
         loader=FileSystemLoader(config.get("directories")["theme"]),
         autoescape=select_autoescape(["html"]),
     )
-    env.globals.update(helpers.ALL_GLOBALS())
+    env.globals.update(helpers.ALL_GLOBALS)
+    env.globals.update({"site": config.get("site")})
     env.filters.update(helpers.ALL_FILTERS)
 
     # Create our markdown -> html renderer
