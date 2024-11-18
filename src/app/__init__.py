@@ -65,7 +65,7 @@ def create_app() -> dict[str, dict[str, Any]]:
 
     # Put everything together
     app = current_app()
-    app["renderers"] = {"markdown": markdown, "jinja": jinja}
+    app["render"] = {"markdown": markdown, "jinja": jinja}
     APP.set(app)
     return app
 

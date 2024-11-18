@@ -10,9 +10,9 @@ def main() -> None:
     start_time = time()
 
     # Create an instance of the generator app
-    app = create_app()
+    create_app()
 
-    all_posts = {}
+    all_posts: dict[str, models.Post] = {}
 
     # Find all markdown files in the posts directory
     for file in config.get("directories")["posts"].glob("*.md"):

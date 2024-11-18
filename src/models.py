@@ -37,7 +37,7 @@ class Page:
 
     def to_html(self, ctx: dict) -> str:
         """Render a page's content to a complete HTML page."""
-        return current_app()["renderers"]["jinja"].get_template(self.template_name).render(ctx)
+        return current_app()["render"]["jinja"].get_template(self.template_name).render(ctx)
 
     def to_file(self, path: Path) -> None:
         """Write a page to disk, optionally minifying it."""
@@ -69,8 +69,8 @@ class Post(Page):
 
     def from_markdown(self) -> str:
         """Convert the page content from Markdown to HTML."""
-        # `self.meta` is provided to add the `wordcount` info to the post meta
-        return current_app()["renderers"]["markdown"].render(self.content, self.meta)
+        # `ctx` is provided to add the `wordcount` info to the post meta
+        return current_app()["render"]["markdown"].render(self.content, self.meta)
 
     def generate_slug(self) -> None:
         """Generate a slug for this post."""
@@ -82,7 +82,7 @@ class Post(Page):
     def parse_content(self) -> None:
         # Parse the content of the markdown file and store the AST for later
         # for further transformations
-        self.parsed_content = current_app()["renderers"]["markdown"].parse(self.content)
+        self.parsed_content = current_app()["render"]["markdown"].parse(self.content)
 
     def parse_meta(self) -> None:
         """Extract a post's metadata from the file."""
