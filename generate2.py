@@ -46,6 +46,32 @@ def main() -> None:
             post_model.to_html(ctx),
         )
 
+    # Create the post index, listing all the posts, saving it in the proper place
+    # depending on the author's decision to have a distinct home page
+    post_index = models.PostIndex(config.get("directories")["theme"])
+    post_index_output_dir = (
+        config.get("directories")["output_dir"] / config.get("post")["output_dir"]
+        if "index_template" in config.get("site")
+        else config.get("directories")["output_dir"]
+    )
+
+    post_index.to_file(
+        post_index_output_dir / "index.html", post_index.to_html({"posts": all_posts.values()})
+    )
+
+    # If a distinct site homepage has been defined, generate it too
+    if "index_template" in config.get("site"):
+        site_index = models.Home(config.get("directories")["theme"])
+        site_index.to_file(
+            config.get("directories")["output_dir"] / "index.html", site_index.to_html()
+        )
+
+    # error_404_template = config.get("directories")["theme"] / "404.jinja2"
+    # if error_404_template.exists():
+    #     error_404_page = models.Page(error_404_template, template_name="404.jinja2")
+    #     error_404_page.to_file(
+    #         config.get("directories")["output_dir"] / "404.html", error_404_page.to_html()
+    #     )
 
     # Provide a basic "how long did it run" message
     print(f"Total generation time: {helpers.duration(time() - start_time)}")

@@ -4,7 +4,7 @@ subtitle = "Sentences on faith, life, and code."
 domain = "https://blog.calebely.net"
 date_format = "%B %d, %Y"
 
-# Uncomment in to create a distinct home page
+# Uncomment to create a distinct home page
 # index_template = "home.jinja2"
 
 [site.logo]
@@ -19,7 +19,6 @@ portfolio = { label = "Portfolio", url = "https://calebely.net" }
 
 [directories]
 theme = "/var/www/obsidian/site-theme"
-# pages = "/var/www/obsidian/site-theme/pages"
 static = "/var/www/obsidian/site-theme/static"
 media = "/var/www/obsidian/attachments"
 posts = "/var/www/obsidian/published"

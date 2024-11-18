@@ -19,6 +19,7 @@ class Page:
     file: Path
     content: str = ""
     raw_meta: str = ""
+    # template_name: str = ""
     meta: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
@@ -33,8 +34,10 @@ class Page:
         """Read a page's content into memory."""
         self.content = self._replace_curly_quotes(self.file.read_text(encoding="utf-8"))
 
-    def to_html(self, /, ctx: dict[str, Any]) -> str:
+    def to_html(self, /, ctx: dict[str, Any] | None = None) -> str:
         """Render a page's content to a complete HTML page."""
+        if ctx is None:
+            ctx = {}
         return current_app()["render"]["jinja"].get_template(self.template_name).render(ctx)
 
     @staticmethod
@@ -46,6 +49,15 @@ class Page:
 
 class Home(Page):
     """Represent the site home post."""
+
+    def __post_init__(self) -> None:
+        # Make the model file point to the actual template name
+        self.file = self.file / self.template_name
+        super().__post_init__()
+
+    @property
+    def template_name(self) -> str:
+        return config.get("site")["index_template"]
 
 
 class Post(Page):
@@ -138,6 +150,11 @@ class Post(Page):
 
 class PostIndex(Page):
     """Represent the post index page post."""
+
+    def __post_init__(self) -> None:
+        # Make the model file point to the actual template name
+        self.file = self.file / self.template_name
+        super().__post_init__()
 
     @property
     def template_name(self) -> str:
