@@ -47,7 +47,7 @@ def replace_curly_quotes(text: str) -> str:
 def make_dist() -> None:
     """Create all of the required directories."""
     all_directories: dict[str, Path] = config.get("directories")
-    dist_path: Path = all_directories["output"]
+    dist_path: Path = all_directories["output_dir"]
 
     # Delete any previous site generation first
     if dist_path.exists():

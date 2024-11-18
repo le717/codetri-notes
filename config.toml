@@ -19,10 +19,11 @@ portfolio = { label = "Portfolio", url = "https://calebely.net" }
 
 [directories]
 theme = "/var/www/obsidian/site-theme"
+# pages = "/var/www/obsidian/site-theme/pages"
 static = "/var/www/obsidian/site-theme/static"
 media = "/var/www/obsidian/attachments"
 posts = "/var/www/obsidian/published"
-output = "dist"
+output_dir = "dist"
 
 [post]
 index_template = "index.jinja2"

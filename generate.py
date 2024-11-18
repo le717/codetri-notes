@@ -154,7 +154,7 @@ def main() -> None:
 
         # Write the generated note
         page.write(
-            str(config.get("directories")["output"]),
+            str(config.get("directories")["output_dir"]),
             str(config.get("post")["output_dir"]),
             note_file,
             data=rendered_note,
@@ -171,7 +171,7 @@ def main() -> None:
     }
     rendered_index = page.render("index", render_opts, env)
     page.write(
-        str(config.get("directories")["output"]),
+        str(config.get("directories")["output_dir"]),
         "index.html",
         data=rendered_index,
         should_minify=args.minify,

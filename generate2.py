@@ -40,11 +40,12 @@ def main() -> None:
 
         # Construct the proper output path for this post and save it to disk
         post_model.to_file(
-            config.get("directories")["output"]
+            config.get("directories")["output_dir"]
             / config.get("post")["output_dir"]
             / f"{post_model.meta['slug']}.html",
             post_model.to_html(ctx),
         )
+
 
     # Provide a basic "how long did it run" message
     print(f"Total generation time: {helpers.duration(time() - start_time)}")
