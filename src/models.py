@@ -37,9 +37,10 @@ class Page:
         """Render a page's content to a complete HTML page."""
         return current_app()["render"]["jinja"].get_template(self.template_name).render(ctx)
 
-    def to_file(self, path: Path) -> None:
+    @staticmethod
+    def to_file(path: Path, content: str) -> None:
         """Write a page to disk, optionally minifying it."""
-        content = minify_html.minify(self.content) if config.get("minify") else self.content
+        content = minify_html.minify(content) if config.get("minify") else content
         path.write_bytes(content.encode())
 
 
@@ -66,10 +67,10 @@ class Post(Page):
     def template_name(self) -> str:
         return config.get("post")["post_template"]
 
-    def from_markdown(self) -> str:
+    def from_markdown(self, /, ctx: dict[str, Any]) -> None:
         """Convert the page content from Markdown to HTML."""
         # `ctx` is provided to add the `wordcount` info to the post meta
-        return current_app()["render"]["markdown"].render(self.content, self.meta)
+        self.content = current_app()["render"]["markdown"].render(self.content, ctx)
 
     def generate_slug(self) -> None:
         """Generate a slug for this post."""
