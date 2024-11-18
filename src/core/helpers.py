@@ -54,7 +54,7 @@ def make_dist() -> None:
         shutil.rmtree(dist_path)
 
     # Create the directory the notes live in
-    (dist_path / all_directories["post_output_base_slug"]).mkdir(parents=True, exist_ok=True)
+    (dist_path / config.get("post")["output_dir"]).mkdir(parents=True, exist_ok=True)
 
     # Create the media directory
     shutil.copytree(

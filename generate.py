@@ -149,15 +149,13 @@ def main() -> None:
             "subtitle": meta["subtitle"],
             "author": meta["author"],
             "date": meta["date"],
-            "url": "{}/{}".format(
-                str(config.get("directories")["post_output_base_slug"]), note_file
-            ),
+            "url": "{}/{}".format(str(config.get("post")["output_dir"]), note_file),
         })
 
         # Write the generated note
         page.write(
             str(config.get("directories")["output"]),
-            str(config.get("directories")["post_output_base_slug"]),
+            str(config.get("post")["output_dir"]),
             note_file,
             data=rendered_note,
             should_minify=args.minify,

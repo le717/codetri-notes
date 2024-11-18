@@ -23,11 +23,11 @@ static = "/var/www/obsidian/site-theme/static"
 media = "/var/www/obsidian/attachments"
 posts = "/var/www/obsidian/published"
 output = "dist"
-post_output_base_slug = "post"
 
 [post]
 index_template = "index.jinja2"
 post_template = "post.jinja2"
+output_dir = "post"
 
 [post.defaults]
 subtitle = ""
