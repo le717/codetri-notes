@@ -17,9 +17,7 @@ __all__ = ["Home", "Post", "PostIndex"]
 @dataclass(slots=True)
 class Page:
     file: Path
-    title: str = ""
     content: str = ""
-    slug: str = ""
     raw_meta: str = ""
     meta: dict[str, Any] = field(default_factory=dict)
 
@@ -121,6 +119,9 @@ class Post(Page):
             page_meta["tags"] = default_tags + page_meta["tags"]
         else:
             page_meta["tags"] = page_meta["tags"] + default_tags
+
+        # Create a container for the post reading stats
+        page_meta["wordcount"] = {}
 
         # Store the meta info, both parsed and raw text
         self.meta = page_meta
