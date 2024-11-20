@@ -4,9 +4,6 @@ subtitle = "Sentences on faith, life, and code."
 domain = "https://blog.calebely.net"
 date_format = "%B %d, %Y"
 
-# Uncomment to create a distinct home page
-# index_template = "home.jinja2"
-
 [site.logo]
 file = "logo.svg"
 width = 80
@@ -17,6 +14,11 @@ alt_text = ""
 podcast = { label = "Podcast", url = "https://podcast.calebely.net" }
 portfolio = { label = "Portfolio", url = "https://calebely.net" }
 
+[site.pages]
+# Uncomment to create a distinct home page
+# home_template = "index.jinja2"
+404_template = "404.jinja2"
+
 [directories]
 theme = "/var/www/obsidian/site-theme"
 static = "/var/www/obsidian/site-theme/static"
@@ -25,7 +27,9 @@ posts = "/var/www/obsidian/published"
 output_dir = "dist"
 
 [post]
+# TODO Remove `index_template`
 index_template = "index.jinja2"
+post_index_template = "index.jinja2"
 post_template = "post.jinja2"
 output_dir = "post"
 

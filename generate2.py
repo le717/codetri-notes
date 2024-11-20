@@ -51,7 +51,7 @@ def main() -> None:
     post_index = models.PostIndex(config.get("directories")["theme"])
     post_index_output_dir = (
         config.get("directories")["output_dir"] / config.get("post")["output_dir"]
-        if "index_template" in config.get("site")
+        if "home_template" in config.get("site")["pages"]
         else config.get("directories")["output_dir"]
     )
 
@@ -60,18 +60,25 @@ def main() -> None:
     )
 
     # If a distinct site homepage has been defined, generate it too
-    if "index_template" in config.get("site"):
-        site_index = models.Home(config.get("directories")["theme"])
+    if "home_template" in config.get("site")["pages"]:
+        site_index = models.Page(
+            file=config.get("directories")["theme"], template_key="home_template"
+        )
         site_index.to_file(
             config.get("directories")["output_dir"] / "index.html", site_index.to_html()
         )
 
-    # error_404_template = config.get("directories")["theme"] / "404.jinja2"
-    # if error_404_template.exists():
-    #     error_404_page = models.Page(error_404_template, template_name="404.jinja2")
-    #     error_404_page.to_file(
-    #         config.get("directories")["output_dir"] / "404.html", error_404_page.to_html()
-    #     )
+    # Generate all defined pages
+    for k, v in config.get("site")["pages"].items():
+        # But skip the home page because that's special
+        if k == "home_template":
+            continue
+
+        site_page = models.Page(config.get("directories")["theme"], template_key=k)
+        site_page.to_file(
+            config.get("directories")["output_dir"] / v.replace(".jinja2", ".html"),
+            site_page.to_html(),
+        )
 
     # Provide a basic "how long did it run" message
     print(f"Total generation time: {helpers.duration(time() - start_time)}")

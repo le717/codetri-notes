@@ -11,7 +11,7 @@ from .app import config, current_app
 from .core.helpers import remove_falsey_items
 
 
-__all__ = ["Home", "Post", "PostIndex"]
+__all__ = ["Post", "PostIndex"]
 
 
 @dataclass(slots=True)
@@ -19,16 +19,23 @@ class Page:
     file: Path
     content: str = ""
     raw_meta: str = ""
-    # template_name: str = ""
+    template_key: str = ""
     meta: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
+        # Make the model file point to the actual template name
+        if not self.file.is_file():
+            self.file = self.file / self.template_name
         self.from_file()
 
     @staticmethod
     def _replace_curly_quotes(text: str) -> str:
         """Replace any curly quotes in the text with straight quotes."""
         return text.replace("“", '"').replace("”", '"').replace("‘", "'").replace("’", "'")
+
+    @property
+    def template_name(self) -> str:
+        return config.get("site")["pages"][self.template_key]
 
     def from_file(self) -> None:
         """Read a page's content into memory."""
@@ -45,19 +52,6 @@ class Page:
         """Write a page to disk, optionally minifying it."""
         content = minify_html.minify(content) if config.get("minify") else content
         path.write_bytes(content.encode())
-
-
-class Home(Page):
-    """Represent the site home post."""
-
-    def __post_init__(self) -> None:
-        # Make the model file point to the actual template name
-        self.file = self.file / self.template_name
-        super().__post_init__()
-
-    @property
-    def template_name(self) -> str:
-        return config.get("site")["index_template"]
 
 
 class Post(Page):
