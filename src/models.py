@@ -145,10 +145,10 @@ class Post(Page):
 class PostIndex(Page):
     """Represent the post index page post."""
 
-    def __post_init__(self) -> None:
-        # Make the model file point to the actual template name
-        self.file = self.file / self.template_name
-        super().__post_init__()
+    # def __post_init__(self) -> None:
+    #     # Make the model file point to the actual template name
+    #     self.file = self.file / self.template_name
+    #     super().__post_init__()
 
     @property
     def template_name(self) -> str:
