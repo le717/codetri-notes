@@ -53,6 +53,7 @@ def create_app() -> dict[str, dict[str, Any]]:
     markdown = MarkdownIt("gfm-like").use(front_matter_plugin).use(wordcount_plugin)
     markdown.options["xhtmlOut"] = False
     markdown.add_render_rule("link_open", render_rules.render_link_open)
+    markdown.add_render_rule("image", render_rules.render_image_caption)
 
     # Create our jinja2 html renderer
     jinja = Environment(

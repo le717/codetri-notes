@@ -5,15 +5,6 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Generate site",
-      "type": "debugpy",
-      "request": "launch",
-      "program": "generate.py",
-      "args": ["-c", "config-local.toml"],
-      "console": "internalConsole",
-      "justMyCode": true
-    },
-    {
       "name": "Generate2 site",
       "type": "debugpy",
       "request": "launch",
