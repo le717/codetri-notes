@@ -1,7 +1,7 @@
+from collections.abc import Iterable
 from pathlib import Path
 from sys import argv
 from tomllib import loads
-from typing import Iterable
 
 
 def get_package(package_info: dict) -> str:

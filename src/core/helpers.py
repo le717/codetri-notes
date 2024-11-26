@@ -2,7 +2,6 @@ import shutil
 from datetime import date, datetime
 from math import floor
 from pathlib import Path
-from typing import Callable
 
 from src.app import config
 
