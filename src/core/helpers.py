@@ -33,9 +33,9 @@ def duration(seconds: int) -> str:
     return f"{mins:02d}:{secs:02d}"
 
 
-def remove_falsey_items(l: list) -> list:
+def remove_falsey_items(li: list) -> list:
     """Remove falsey items from a list."""
-    return [v for v in l if v]
+    return [v for v in li if v]
 
 
 def replace_curly_quotes(text: str) -> str:

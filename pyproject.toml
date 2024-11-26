@@ -31,6 +31,7 @@ indent-style = "space"
 quote-style = "double"
 
 [tool.ruff.lint]
+extend-ignore = ["TD002"]
 extend-select = [
   "ERA", # eradicate
   "I",   # isort,
