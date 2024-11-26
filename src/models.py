@@ -8,7 +8,7 @@ from urllib.parse import quote_plus
 import minify_html
 
 from .app import config, current_app
-from .core.helpers import remove_falsey_items
+from .core.helpers import remove_falsey_items, replace_curly_quotes
 
 
 __all__ = ["Post", "PostIndex"]
@@ -28,18 +28,13 @@ class Page:
             self.file = self.file / self.template_name
         self.from_file()
 
-    @staticmethod
-    def _replace_curly_quotes(text: str) -> str:
-        """Replace any curly quotes in the text with straight quotes."""
-        return text.replace("“", '"').replace("”", '"').replace("‘", "'").replace("’", "'")
-
     @property
     def template_name(self) -> str:
         return config.get("site")["pages"][self.template_key]
 
     def from_file(self) -> None:
         """Read a page's content into memory."""
-        self.content = self._replace_curly_quotes(self.file.read_text(encoding="utf-8"))
+        self.content = replace_curly_quotes(self.file.read_text(encoding="utf-8"))
 
     def to_html(self, /, ctx: dict[str, Any] | None = None) -> str:
         """Render a page's content to a complete HTML page."""
