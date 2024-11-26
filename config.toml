@@ -27,9 +27,7 @@ posts = "/var/www/obsidian/published"
 output_dir = "dist"
 
 [post]
-# TODO Remove `index_template`
-index_template = "index.jinja2"
-post_index_template = "index.jinja2"
+index_template = "post_index.jinja2"
 post_template = "post.jinja2"
 output_dir = "post"
 
