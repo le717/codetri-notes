@@ -33,7 +33,9 @@ output_dir = "post"
 
 [post.defaults]
 subtitle = ""
-author = "Caleb"
+
+# Fill this in to provide a default author
+# author = ""
 
 # Fill this in to provide default tags. Can be `str` or `list[str]`
 # tags = ""

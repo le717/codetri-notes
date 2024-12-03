@@ -103,7 +103,14 @@ class Post(Page):
         page_meta["subtitle"] = page_meta.get(
             "subtitle", config.get("post")["defaults"]["subtitle"]
         )
-        page_meta["author"] = page_meta.get("author", config.get("post")["defaults"]["author"])
+
+        # If there is an author for the post, use it. Even if not, set the key
+        page_meta["author"] = page_meta.get("author", "")
+
+        # If there's no post author but a default author, use it instead
+        default_author: str = config.get("post")["defaults"].get("author", "")
+        if not page_meta["author"] and default_author:
+            page_meta["author"] = default_author
 
         # If there are no tags for the post, set the key. If there are default tags, use them
         page_meta["tags"] = page_meta.get("tags", [])
