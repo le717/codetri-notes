@@ -139,6 +139,10 @@ class Post(Page):
         # Create a container for the post reading stats
         page_meta["wordcount"] = {}
 
+        # Generate the caption for the featured image for the post if the both exist
+        if page_meta.get("image") and page_meta.get("caption"):
+            page_meta["caption"] = current_app()["render"]["markdown"].render(page_meta["caption"])
+
         # Store the meta info, both parsed and raw text
         self.meta = page_meta
         self.raw_meta = front_matter[0].content
