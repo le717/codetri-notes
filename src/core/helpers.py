@@ -63,6 +63,9 @@ def make_dist() -> None:
     # Create the site static files folders and files
     shutil.copytree(all_directories["static"], (dist_path / "static"), dirs_exist_ok=True)
 
+    # Copy all of the site root files
+    shutil.copytree(all_directories["root"], (dist_path), dirs_exist_ok=True)
+
 
 def format_datetime(dt: datetime, fmt: str) -> str:
     """Format a datetime object to a datestring."""
