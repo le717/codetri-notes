@@ -80,6 +80,14 @@ def main() -> None:
             site_page.to_html(),
         )
 
+    # If we want to generate feeds, do so
+    if config.get("feed"):
+        from src.core.feed import generate_json_feed
+
+        (config.get("directories")["output_dir"] / "feed.json").write_text(
+            generate_json_feed(all_posts)
+        )
+
     # Provide a basic "how long did it run" message
     print(f"Total generation time: {helpers.duration(time() - start_time)}")
 

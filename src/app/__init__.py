@@ -32,6 +32,11 @@ def get_arguments() -> argparse.Namespace:
         action="store_true",
         help="Should the generated files be minified? (default: no)",
     )
+    parser.add_argument(
+        "--no-feed",
+        action="store_true",
+        help="Disable generating RSS and JSON feed files (default: no)",
+    )
     # TODO: Add verbosity param
     args = parser.parse_args()
 
@@ -48,6 +53,7 @@ def create_app() -> dict[str, dict[str, Any]]:
     args = get_arguments()
     config.set_initial(Path(args.config))
     config.set("minify", args.minify)
+    config.set("feed", not args.no_feed)
 
     # Create our markdown -> html renderer
     markdown = MarkdownIt("gfm-like").use(front_matter_plugin).use(wordcount_plugin)
