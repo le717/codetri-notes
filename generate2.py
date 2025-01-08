@@ -87,7 +87,7 @@ def main() -> None:
         (config.get("directories")["output_dir"] / "feed.json").write_text(
             generate_json_feed(all_posts)
         )
-        (config.get("directories")["output_dir"] / "feed.xml").write_text(
+        (config.get("directories")["output_dir"] / "feed.xml").write_bytes(
             generate_rss_feed(all_posts)
         )
 
