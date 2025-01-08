@@ -82,10 +82,13 @@ def main() -> None:
 
     # If we want to generate feeds, do so
     if config.get("feed"):
-        from src.core.feed import generate_json_feed
+        from src.core.feed import generate_json_feed, generate_rss_feed
 
         (config.get("directories")["output_dir"] / "feed.json").write_text(
             generate_json_feed(all_posts)
+        )
+        (config.get("directories")["output_dir"] / "feed.xml").write_text(
+            generate_rss_feed(all_posts)
         )
 
     # Provide a basic "how long did it run" message
