@@ -37,7 +37,6 @@ def get_arguments() -> argparse.Namespace:
         action="store_true",
         help="Disable generating RSS and JSON feed files (default: no)",
     )
-    # TODO: Add verbosity param
     args = parser.parse_args()
 
     # Display the argument values used

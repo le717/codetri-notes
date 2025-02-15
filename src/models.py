@@ -136,6 +136,9 @@ class Post(Page):
         else:
             page_meta["tags"] = page_meta["tags"] + default_tags
 
+        # Prefix each tag with a hashtag to better indicate its purpose
+        page_meta["tags"] = [f"#{tag}" for tag in page_meta["tags"]]
+
         # Create a container for the post reading stats
         page_meta["wordcount"] = {}
 
