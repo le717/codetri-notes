@@ -40,13 +40,13 @@ class Page:
         """Render a page's content to a complete HTML page."""
         if ctx is None:
             ctx = {}
-        return current_app()["render"]["jinja"].get_template(self.template_name).render(ctx)
+        return current_app()["render"]["jinja"].get_template(self.template_name).render(ctx).strip()
 
     @staticmethod
     def to_file(path: Path, content: str) -> None:
         """Write a page to disk, optionally minifying it."""
         content = minify_html.minify(content) if config.get("minify") else content
-        path.write_bytes(content.encode())
+        path.write_bytes(content.strip().encode())
 
 
 class Post(Page):
