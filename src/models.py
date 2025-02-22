@@ -34,7 +34,7 @@ class Page:
 
     def from_file(self) -> None:
         """Read a page's content into memory."""
-        self.content = replace_curly_quotes(self.file.read_text(encoding="utf-8"))
+        self.content = replace_curly_quotes(self.file.read_text(encoding="utf-8")).strip()
 
     def to_html(self, /, ctx: dict[str, Any] | None = None) -> str:
         """Render a page's content to a complete HTML page."""
