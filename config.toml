@@ -1,7 +1,7 @@
 [site]
 title = "Live Life Real"
 subtitle = "Sentences on faith, life, and code."
-domain = "https://blog.calebely.net"
+domain = "https://blog.codetri.net"
 date_format = "%B %d, %Y"
 
 [site.logo]
@@ -11,8 +11,8 @@ height = 80
 alt_text = ""
 
 [site.nav]
-podcast = { label = "Podcast", url = "https://podcast.calebely.net" }
-portfolio = { label = "Portfolio", url = "https://calebely.net" }
+podcast = { label = "Podcast", url = "https://podcast.codetri.net" }
+portfolio = { label = "Portfolio", url = "https://codetri.net" }
 
 [site.pages]
 # Uncomment to create a distinct home page
